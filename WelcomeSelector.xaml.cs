@@ -1,4 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,12 +15,16 @@ using System.Windows.Shapes;
 
 namespace StoreManager
 {
-    public partial class MainWindow : Window
+    /// <summary>
+    /// Interaction logic for WelcomeSelector.xaml
+    /// </summary>
+    public partial class WelcomeSelector : Page
     {
-        public MainWindow()
+        private Frame _frame;
+        public WelcomeSelector(Frame frame)
         {
             InitializeComponent();
-            MainFrame.Navigate(new WelcomeSelector(MainFrame));
+            _frame = frame;
         }
     }
 }
