@@ -23,6 +23,9 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Label Grid.ColumnSpan="3" Content="{lex:Loc WelcomeSelector_welcome}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Button Content="{lex:Loc WelcomeSelector_cashierBtn}" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Center"/>
+        <Button Content="{lex:Loc WelcomeSelector_storageBtn}" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center"/>
+        <Button Grid.Column="1" Content="{lex:Loc WelcomeSelector_languageBtn}" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center"/>
 
 
 
