@@ -7,7 +7,6 @@ namespace StoreManager.Classes
         private const string InitFolderPath = "sql";
         private const string ConnectionString = "Server=db-par-02.apollopanel.com;User ID=u208217_ctR3Bmxw2K;Password=wLj2Z^PbrDnW9uUN^1atRIHV;Database=s208217_barbs";
         private static bool IsInitialized = false;
-
         public static async Task Initialize()
         {       
             var files = await Task.Run(() => Directory.GetFiles(InitFolderPath));
