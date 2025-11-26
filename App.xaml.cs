@@ -1,12 +1,17 @@
-﻿using System.Configuration;
-using System.Data;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
-using MySqlConnector;
+using StoreManager.Classes;
 
 namespace StoreManager
 {
     public partial class App : Application
     {
+        protected override async void OnStartup(EventArgs e)
+        {
+            await Database.Initialize();
+            base.OnStartup(e);
+        }
     }
 
 }
