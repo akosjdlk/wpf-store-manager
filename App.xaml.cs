@@ -7,7 +7,7 @@ namespace StoreManager
 {
     public partial class App : Application
     {
-        protected override async void OnStartup(EventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             await Database.Initialize();
             base.OnStartup(e);

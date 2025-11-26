@@ -1,5 +1,4 @@
-INSERT INTO barcodes (code, product_id)
-SELECT * FROM (VALUES
+INSERT INTO barcodes (code, product_id) VALUES
     ("00051", 2000007),
     ("0010000009", 1680002),
     ("0010000010", 1680003),
@@ -18880,5 +18879,3 @@ SELECT * FROM (VALUES
     ("8722700631897", 5100003),
     ("5997110150372", 7880001),
     ("59921950", 1020011)
-) AS v(code, product_id)
-WHERE NOT EXISTS (SELECT 1 FROM barcodes)

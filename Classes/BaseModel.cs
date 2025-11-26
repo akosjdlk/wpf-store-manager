@@ -1,4 +1,8 @@
-﻿namespace StoreManager.Classes
+﻿using System.Collections.Concurrent;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+
+namespace StoreManager.Classes
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class DbFieldAttribute : Attribute { }
@@ -30,6 +34,16 @@
                 .ToArray()
             );
         }
+
+        protected void Set<T>(ref T field, T value, [CallerMemberName] string propName = "")
+        {
+            if (!EqualityComparer<T>.Default.Equals(field, value))
+            {
+                field = value;
+                _edited.Add(propName.ToLower());
+            }
+        }
+
         public async Task Save()
         {
             var fields = GetDbFields();
