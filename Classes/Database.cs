@@ -23,7 +23,7 @@ namespace StoreManager.Classes
             using var sr = new StreamReader(filePath);
             string content = sr.ReadToEnd();
             using var cmd = await GetCommandAsync(content);
-            await cmd.ExecuteNonQueryAsync();
+            //await cmd.ExecuteNonQueryAsync();
         }
 
         public static async Task<MySqlCommand> GetCommandAsync(string? query = null)

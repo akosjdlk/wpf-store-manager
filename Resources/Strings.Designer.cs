@@ -61,7 +61,115 @@ namespace StoreManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Üdvözlünk.
+        ///   Looks up a localized string similar to Vissza.
+        /// </summary>
+        internal static string LoginPage_backButton {
+            get {
+                return ResourceManager.GetString("LoginPage_backButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Értékesítői azonosítás.
+        /// </summary>
+        internal static string LoginPage_cashierTitle {
+            get {
+                return ResourceManager.GetString("LoginPage_cashierTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kérjük, töltse ki a mezőt!.
+        /// </summary>
+        internal static string LoginPage_errorEmpty {
+            get {
+                return ResourceManager.GetString("LoginPage_errorEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Azonosító.
+        /// </summary>
+        internal static string LoginPage_identifierLabel {
+            get {
+                return ResourceManager.GetString("LoginPage_identifierLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adja meg az azonosítóját.
+        /// </summary>
+        internal static string LoginPage_identifierPlaceholder {
+            get {
+                return ResourceManager.GetString("LoginPage_identifierPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Belépés.
+        /// </summary>
+        internal static string LoginPage_loginButton {
+            get {
+                return ResourceManager.GetString("LoginPage_loginButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jelszó.
+        /// </summary>
+        internal static string LoginPage_passwordLabel {
+            get {
+                return ResourceManager.GetString("LoginPage_passwordLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adja meg a jelszavát.
+        /// </summary>
+        internal static string LoginPage_passwordPlaceholder {
+            get {
+                return ResourceManager.GetString("LoginPage_passwordPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Raktári belépés.
+        /// </summary>
+        internal static string LoginPage_storageTitle {
+            get {
+                return ResourceManager.GetString("LoginPage_storageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Értékesítési felület.
+        /// </summary>
+        internal static string WelcomeSelector_cashierBtn {
+            get {
+                return ResourceManager.GetString("WelcomeSelector_cashierBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch to English.
+        /// </summary>
+        internal static string WelcomeSelector_languageBtn {
+            get {
+                return ResourceManager.GetString("WelcomeSelector_languageBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Raktárkezelési felület.
+        /// </summary>
+        internal static string WelcomeSelector_storageBtn {
+            get {
+                return ResourceManager.GetString("WelcomeSelector_storageBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Üdvözöljük az üzletkezelő rendszerben!.
         /// </summary>
         internal static string WelcomeSelector_welcome {
             get {

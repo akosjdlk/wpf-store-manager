@@ -117,7 +117,47 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="WelcomeSelector_cashierBtn" xml:space="preserve">
+    <value>Értékesítési felület</value>
+    <comment>Professional term for cashier/sales interface</comment>
+  </data>
+  <data name="WelcomeSelector_languageBtn" xml:space="preserve">
+    <value>Switch to English</value>
+    <comment>Switch to English language</comment>
+  </data>
+  <data name="WelcomeSelector_storageBtn" xml:space="preserve">
+    <value>Raktárkezelési felület</value>
+    <comment>Professional term for warehouse management interface</comment>
+  </data>
   <data name="WelcomeSelector_welcome" xml:space="preserve">
-    <value>Üdvözlünk</value>
+    <value>Üdvözöljük az üzletkezelő rendszerben!</value>
+    <comment>Welcome to the store management system</comment>
+  </data>
+  <data name="LoginPage_cashierTitle" xml:space="preserve">
+    <value>Értékesítői azonosítás</value>
+  </data>
+  <data name="LoginPage_storageTitle" xml:space="preserve">
+    <value>Raktári belépés</value>
+  </data>
+  <data name="LoginPage_identifierLabel" xml:space="preserve">
+    <value>Azonosító</value>
+  </data>
+  <data name="LoginPage_identifierPlaceholder" xml:space="preserve">
+    <value>Adja meg az azonosítóját</value>
+  </data>
+  <data name="LoginPage_passwordLabel" xml:space="preserve">
+    <value>Jelszó</value>
+  </data>
+  <data name="LoginPage_passwordPlaceholder" xml:space="preserve">
+    <value>Adja meg a jelszavát</value>
+  </data>
+  <data name="LoginPage_loginButton" xml:space="preserve">
+    <value>Belépés</value>
+  </data>
+  <data name="LoginPage_backButton" xml:space="preserve">
+    <value>Vissza</value>
+  </data>
+  <data name="LoginPage_errorEmpty" xml:space="preserve">
+    <value>Kérjük, töltse ki a mezőt!</value>
   </data>
 </root>

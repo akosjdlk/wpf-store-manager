@@ -11,23 +11,195 @@
       lex:ResxLocalizationProvider.DefaultDictionary="Resources.Strings"
       Title="WelcomeSelector">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <Page.Resources>
+        <!-- Modern Color Palette -->
+        <SolidColorBrush x:Key="PrimaryColor" Color="#2563EB"/>
+        <SolidColorBrush x:Key="SecondaryColor" Color="#10B981"/>
+        <SolidColorBrush x:Key="AccentColor" Color="#8B5CF6"/>
+        <SolidColorBrush x:Key="BackgroundColor" Color="#F9FAFB"/>
+        <SolidColorBrush x:Key="CardBackground" Color="White"/>
+        <SolidColorBrush x:Key="TextPrimary" Color="#111827"/>
+        <SolidColorBrush x:Key="TextSecondary" Color="#6B7280"/>
+        
+        <!-- Modern Button Style -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource CardBackground}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="32,20"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.1" Color="#000000"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource PrimaryColor}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Language Button Style -->
+        <Style x:Key="LanguageButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+        </Style>
+
+        <!-- Card Border Style - Clickable -->
+        <Style x:Key="ClickableCard" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource CardBackground}"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Margin" Value="15"/>
+            <Setter Property="Padding" Value="40,50"/>
+            <Setter Property="MinWidth" Value="280"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="30" ShadowDepth="0" Opacity="0.08" Color="#000000"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="35" ShadowDepth="0" Opacity="0.15" Color="#2563EB"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="{StaticResource BackgroundColor}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Grid.ColumnSpan="3" Content="{lex:Loc WelcomeSelector_welcome}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Button Content="{lex:Loc WelcomeSelector_cashierBtn}" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Center"/>
-        <Button Content="{lex:Loc WelcomeSelector_storageBtn}" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center"/>
-        <Button Grid.Column="1" Content="{lex:Loc WelcomeSelector_languageBtn}" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center"/>
 
+        <!-- Welcome Header -->
+        <StackPanel Grid.Row="0" Margin="0,60,0,0" HorizontalAlignment="Center">
+            <TextBlock Text="{lex:Loc WelcomeSelector_welcome}" 
+                       FontSize="42" 
+                       FontWeight="Bold" 
+                       Foreground="{StaticResource TextPrimary}"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,10"/>
+            <Rectangle Height="4" Width="80" Fill="{StaticResource PrimaryColor}" 
+                       HorizontalAlignment="Center" RadiusX="2" RadiusY="2"/>
+        </StackPanel>
 
+        <!-- Main Buttons -->
+        <Grid Grid.Row="1" 
+              VerticalAlignment="Center" 
+              HorizontalAlignment="Center"
+              Margin="0,40,0,0"
+              Grid.IsSharedSizeScope="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="CardGroup"/>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="CardGroup"/>
+            </Grid.ColumnDefinitions>
 
+            <!-- Cashier Button Card -->
+            <Border Grid.Column="0"
+                    Style="{StaticResource ClickableCard}"
+                    MouseLeftButtonUp="CashierCard_Click">
+                <StackPanel HorizontalAlignment="Center">
+                    <Viewbox Width="64" Height="64" Margin="0,0,0,20">
+                        <Canvas Width="24" Height="24">
+                            <Path Fill="{StaticResource PrimaryColor}" 
+                                  Data="M3 3h18v4H3V3m0 14h18v4H3v-4m0-7h18v4H3v-4z"/>
+                        </Canvas>
+                    </Viewbox>
+                    <TextBlock Text="{lex:Loc WelcomeSelector_cashierBtn}"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimary}"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Storage Button Card -->
+            <Border Grid.Column="1"
+                    Style="{StaticResource ClickableCard}"
+                    MouseLeftButtonUp="StorageCard_Click">
+                <StackPanel HorizontalAlignment="Center">
+                    <Viewbox Width="64" Height="64" Margin="0,0,0,20">
+                        <Canvas Width="24" Height="24">
+                            <Path Fill="{StaticResource SecondaryColor}" 
+                                  Data="M6 2L2 6v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6l-4-4H6zm7 1.5l3.5 3.5h-7L13 3.5zM4 8h16v12H4V8z"/>
+                        </Canvas>
+                    </Viewbox>
+                    <TextBlock Text="{lex:Loc WelcomeSelector_storageBtn}"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimary}"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- Language Button (Bottom) -->
+        <StackPanel Grid.Row="2" 
+                    HorizontalAlignment="Center" 
+                    Margin="0,0,0,40">
+            <Button Content="{lex:Loc WelcomeSelector_languageBtn}" 
+                    Style="{StaticResource LanguageButton}"
+                    MinWidth="150" Click="SwitchLanguageBtn">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="🌐" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <ContentPresenter VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryColor}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </StackPanel>
     </Grid>
 </Page>

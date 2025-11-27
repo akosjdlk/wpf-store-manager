@@ -117,7 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="WelcomeSelector_cashierBtn" xml:space="preserve">
+    <value>Retail software</value>
+  </data>
+  <data name="WelcomeSelector_languageBtn" xml:space="preserve">
+    <value>Váltás magyarra</value>
+  </data>
+  <data name="WelcomeSelector_storageBtn" xml:space="preserve">
+    <value>Storage management software</value>
+  </data>
   <data name="WelcomeSelector_welcome" xml:space="preserve">
-    <value>Welcome</value>
+    <value>Welcome to our Store Management software!</value>
   </data>
 </root>
