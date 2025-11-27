@@ -1,44 +1,96 @@
 using StoreManager.Classes;
+using System.Windows.Controls.Primitives;
 
 namespace StoreManager.Models
 {
-    public class Product : BaseModel
+    public class Product : BaseModel<Product>
     {
         protected override string TableName => "products";
 
-        private string _name = "";
-        private decimal _price;
-        private int _stock;
 
-        [DbField]
+        [DbField("id"), AutoIncrement]
+        public int Id { get; private set; }
+
+
+        [DbField("name")]
         public string Name
         {
             get => _name;
-            set => Set(ref _name, ValidateInput(value, 100));
+            set => Set(ref _name, ValidateInput(value, 255));
         }
+        private string _name = string.Empty;
 
-        [DbField]
-        public decimal Price
+        [DbField("unit")]
+        public string Unit
         {
-            get => _price;
-            set => Set(ref _price, value);
+            get => _unit;
+            set => Set(ref _unit, ValidateInput(value, 50));
         }
+        private string _unit = string.Empty;
 
-        [DbField]
-        public int Stock
+        [DbField("supplier_price")]
+        public decimal SupplierPrice
+        {
+            get => _supplierPrice;
+            set => Set(ref _supplierPrice, value);
+        }
+        private decimal _supplierPrice;
+
+        [DbField("sale_price")]
+        public decimal SalePrice
+        {
+            get => _salePrice;
+            set => Set(ref _salePrice, value);
+        }
+        private decimal _salePrice;
+
+        [DbField("vat_percentage")]
+        public int VatPercentage
+        {
+            get => _vatPercentage;
+            set => Set(ref _vatPercentage, value);
+        }
+        private int _vatPercentage;
+
+        [DbField("stock")]
+        public decimal Stock
         {
             get => _stock;
             set => Set(ref _stock, value);
         }
+        private decimal _stock;
 
-        // Parameterless constructor is required
-        public Product() { }
-
-        public Product(string name, decimal price, int stock)
+        [DbField("fractionable")]
+        public bool Fractionable
         {
-            _name = ValidateInput(name, 100);
-            _price = price;
-            _stock = stock;
+            get => _fractionable;
+            set => Set(ref _fractionable, value);
+        }
+        private bool _fractionable;
+
+        public DateTime LastModified { get; private set; }
+
+        // Utils
+        public async Task<Barcode> AddBarcode(string ean)
+        {
+            Barcode barcode = new() { Code=ean, ProductId=this.Id };
+            await barcode.Save();
+            return barcode;
+        }
+
+        public async Task<List<Product>> GetProducts(bool withBarcodes = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<Barcode>> GetBarcodes()
+        {
+
+            using var cmd = await Database.GetCommandAsync("SELECT * FROM barcodes WHERE product_id = @product_id");
+            cmd.Parameters.AddWithValue("@product_id", Id);
+
+            using var reader = await cmd.ExecuteReaderAsync();
+            return await Barcode.FromReaderAsync(reader);
         }
     }
 }

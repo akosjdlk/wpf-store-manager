@@ -1,0 +1,55 @@
+﻿using StoreManager.Classes;
+using StoreManager.Models;
+using System.Windows.Documents;
+
+namespace StoreManager.Models
+{
+    public class Barcode : BaseModel<Barcode>
+    {
+        protected override string TableName => "barcodes";
+
+        // PRIMARY KEY --------------------------------------------------------
+
+        [DbField("code")]
+        public string Code
+        {
+            get => _code;
+            set => Set(ref _code, ValidateCode(value));
+        }
+        private string _code = string.Empty;
+
+        // FOREIGN KEY --------------------------------------------------------
+
+        [DbField("product_id")]
+        public int ProductId
+        {
+            get => _productId;
+            set => Set(ref _productId, value);
+        }
+        private int _productId;
+
+        // ----------------------------------------------------------
+
+        private static string ValidateCode(string code)
+        {
+            code = code.Trim();
+
+            if (code.Length == 0)
+                throw new ArgumentException("Barcode cannot be empty");
+
+            if (code.Length > 13)
+                throw new ArgumentException("Barcode cannot exceed 13 characters");
+
+            // TODO: add EAN-13 checksum validation
+
+            return code;
+        }
+
+        public static async Task<List<Barcode>> GetAll()
+        {
+            using var cmd = await Database.GetCommandAsync("SELECT * FROM barcodes");
+            var list = await cmd.ExecuteReaderAsync();
+            return await FromReaderAsync(list);
+        }
+    }
+}
