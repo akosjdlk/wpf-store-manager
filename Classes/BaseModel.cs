@@ -93,6 +93,31 @@ namespace StoreManager.Classes
                 _edited.Add(propName.ToLower());
             }
         }
+        public static async Task<TSelf?> FromFirstRowAsync(DbDataReader reader)
+        {
+            if (!await reader.ReadAsync())
+                return null;
+
+            var obj = new TSelf();
+            var fields = obj.GetDbFields();
+
+            var map = fields.ToDictionary(
+                p => (p.GetCustomAttribute<DbFieldAttribute>()?.ColumnName ?? p.Name).ToLower(),
+                p => p
+            );
+
+            for (int i = 0; i < reader.FieldCount; i++)
+            {
+                string col = reader.GetName(i).ToLower();
+                if (!map.TryGetValue(col, out var prop))
+                    continue;
+
+                object? value = await reader.IsDBNullAsync(i) ? null : reader.GetValue(i);
+                prop.SetValue(obj, value);
+            }
+
+            return obj;
+        }
 
         public async Task Save()
         {

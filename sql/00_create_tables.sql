@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS products (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     unit VARCHAR(50) NOT NULL,
     supplier_price DECIMAL(10,2) NOT NULL,
@@ -14,10 +14,18 @@ CREATE TABLE IF NOT EXISTS products (
 );
 
 CREATE TABLE IF NOT EXISTS barcodes (
+    product_id INT NOT NULL,
     code VARCHAR(13) NOT NULL,
-    product_id INT UNSIGNED NOT NULL,
 
     PRIMARY KEY (code),
     FOREIGN KEY (product_id) REFERENCES products(id)
         ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS users (
+    id INT NOT NULL AUTO_INCREMENT,
+    can_access_storage TINYINT(1) NOT NULL DEFAULT 0,
+    password VARCHAR(255) NOT NULL,
+
+    PRIMARY KEY (id)
 );

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WPFLocalizeExtension.Engine;
+using StoreManager.Classes;
 
 namespace StoreManager
 {
@@ -53,25 +54,34 @@ namespace StoreManager
             else
             {
                 TitleText.Text = LocalizeDictionary.Instance.GetLocalizedObject("StoreManager", "Resources.Strings", "LoginPage_storageTitle", LocalizeDictionary.Instance.Culture).ToString();
-                IdentifierPanel.Visibility = Visibility.Collapsed;
+                IdentifierPanel.Visibility = Visibility.Visible;
                 PasswordPanel.Visibility = Visibility.Visible;
                 PasswordBox.Focus();
             }
         }
 
-        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             ErrorText.Visibility = Visibility.Collapsed;
 
+            string identifier = IdentifierTextBox.Text.Trim();
+                
+            if (string.IsNullOrEmpty(identifier))
+            {
+                ErrorText.Visibility = Visibility.Visible;
+                return;
+            }
+
+            User? user = await User.GetUser(Convert.ToInt16(identifier));
+            if (user == null)
+            {
+                // Error
+                Console.WriteLine("Error");
+                return;
+            }
+
             if (_loginMode == LoginMode.Cashier)
             {
-                string identifier = IdentifierTextBox.Text.Trim();
-                
-                if (string.IsNullOrEmpty(identifier))
-                {
-                    ErrorText.Visibility = Visibility.Visible;
-                    return;
-                }
 
                 // TODO: Itt ellenőrizheted az azonosítót
                 // Példa validációra:
@@ -88,12 +98,16 @@ namespace StoreManager
                     ErrorText.Visibility = Visibility.Visible;
                     return;
                 }
+                if (user.CanAccessStorage && user.Password == password)
+                {
 
-                // TODO: Itt ellenőrizheted a jelszót
-                // Példa validációra:
-                // if (!IsValidPassword(password)) { ... }
+                    NavigateToTargetPage(password);
+                } else
+                {
+                    Console.WriteLine("nem");
+                }
+                
 
-                NavigateToTargetPage(password);
             }
         }
 

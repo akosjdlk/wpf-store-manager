@@ -80,7 +80,7 @@ namespace StoreManager.Models
 
         public async Task<List<Product>> GetProducts(bool withBarcodes = false)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(); // TODO
         }
 
         public async Task<List<Barcode>> GetBarcodes()
