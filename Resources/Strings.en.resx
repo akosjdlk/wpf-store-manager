@@ -118,15 +118,55 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="WelcomeSelector_cashierBtn" xml:space="preserve">
-    <value>Retail software</value>
+    <value>Sales Interface</value>
+    <comment>Professional term for cashier/sales interface</comment>
   </data>
   <data name="WelcomeSelector_languageBtn" xml:space="preserve">
     <value>Váltás magyarra</value>
+    <comment>Switch to Hungarian language</comment>
   </data>
   <data name="WelcomeSelector_storageBtn" xml:space="preserve">
-    <value>Storage management software</value>
+    <value>Warehouse Management</value>
+    <comment>Professional term for warehouse management interface</comment>
   </data>
   <data name="WelcomeSelector_welcome" xml:space="preserve">
-    <value>Welcome to our Store Management software!</value>
+    <value>Welcome to the Store Management System!</value>
+    <comment>Welcome to the store management system</comment>
+  </data>
+  <data name="LoginPage_cashierTitle" xml:space="preserve">
+    <value>Cashier Authentication</value>
+    <comment>Title for cashier login page</comment>
+  </data>
+  <data name="LoginPage_storageTitle" xml:space="preserve">
+    <value>Warehouse Access</value>
+    <comment>Title for warehouse login page</comment>
+  </data>
+  <data name="LoginPage_identifierLabel" xml:space="preserve">
+    <value>Identifier</value>
+    <comment>Label for identifier input field</comment>
+  </data>
+  <data name="LoginPage_identifierPlaceholder" xml:space="preserve">
+    <value>Enter your identifier</value>
+    <comment>Placeholder text for identifier field</comment>
+  </data>
+  <data name="LoginPage_passwordLabel" xml:space="preserve">
+    <value>Password</value>
+    <comment>Label for password input field</comment>
+  </data>
+  <data name="LoginPage_passwordPlaceholder" xml:space="preserve">
+    <value>Enter your password</value>
+    <comment>Placeholder text for password field</comment>
+  </data>
+  <data name="LoginPage_loginButton" xml:space="preserve">
+    <value>Sign In</value>
+    <comment>Text for login button</comment>
+  </data>
+  <data name="LoginPage_backButton" xml:space="preserve">
+    <value>Back</value>
+    <comment>Text for back button</comment>
+  </data>
+  <data name="LoginPage_errorEmpty" xml:space="preserve">
+    <value>Please fill in the field!</value>
+    <comment>Error message for empty input</comment>
   </data>
 </root>

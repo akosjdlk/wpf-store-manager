@@ -199,7 +199,16 @@
                 </StackPanel>
 
                 <!-- Password Input (for Storage) -->
+                
                 <StackPanel x:Name="PasswordPanel" Visibility="Collapsed" Margin="0,0,0,20">
+                    <TextBlock Text="{lex:Loc LoginPage_identifierLabel}"
+                           FontSize="14"
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource TextPrimary}"
+                           Margin="0,0,0,8"/>
+                    <TextBox x:Name="StorageIdentifierTextBox"
+                         Style="{StaticResource ModernTextBox}"
+                         Tag="{lex:Loc LoginPage_identifierPlaceholder}"/>
                     <TextBlock Text="{lex:Loc LoginPage_passwordLabel}"
                                FontSize="14"
                                FontWeight="SemiBold"
