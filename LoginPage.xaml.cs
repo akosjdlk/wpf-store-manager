@@ -82,11 +82,6 @@ namespace StoreManager
 
             if (_loginMode == LoginMode.Cashier)
             {
-
-                // TODO: Itt ellenőrizheted az azonosítót
-                // Példa validációra:
-                // if (!IsValidIdentifier(identifier)) { ... }
-
                 NavigateToTargetPage(identifier);
             }
             else // Storage
@@ -100,7 +95,6 @@ namespace StoreManager
                 }
                 if (user.CanAccessStorage && user.Password == password)
                 {
-
                     NavigateToTargetPage(password);
                 } else
                 {

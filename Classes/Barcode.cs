@@ -1,8 +1,6 @@
-﻿using StoreManager.Classes;
-using StoreManager.Models;
-using System.Windows.Documents;
+﻿using System.Windows.Documents;
 
-namespace StoreManager.Models
+namespace StoreManager.Classes
 {
     public class Barcode : BaseModel<Barcode>
     {
@@ -32,6 +30,10 @@ namespace StoreManager.Models
 
         private static string ValidateCode(string code)
         {
+            if (code is null)
+            {
+                throw new ArgumentException("Barcode cannot be null");
+            }
             code = code.Trim();
 
             if (code.Length == 0)
@@ -48,8 +50,8 @@ namespace StoreManager.Models
         public static async Task<List<Barcode>> GetAll()
         {
             using var cmd = await Database.GetCommandAsync("SELECT * FROM barcodes");
-            var list = await cmd.ExecuteReaderAsync();
-            return await FromReaderAsync(list);
+            using var reader = await cmd.ExecuteReaderAsync();
+            return await FromReaderAsync(reader);
         }
     }
 }

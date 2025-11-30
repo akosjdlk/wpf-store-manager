@@ -1,7 +1,6 @@
-using StoreManager.Classes;
 using System.Windows.Controls.Primitives;
 
-namespace StoreManager.Models
+namespace StoreManager.Classes
 {
     public class Product : BaseModel<Product>
     {
@@ -73,15 +72,17 @@ namespace StoreManager.Models
         // Utils
         public async Task<Barcode> AddBarcode(string ean)
         {
-            Barcode barcode = new() { Code=ean, ProductId=this.Id };
+            Barcode barcode = new() { Code=ean, ProductId=Id };
             await barcode.Save();
             return barcode;
         }
 
-        public async Task<List<Product>> GetProducts(bool withBarcodes = false)
+		public static async Task<List<Product>> GetAll()
         {
-            throw new NotImplementedException(); // TODO
-        }
+            using var cmd = await Database.GetCommandAsync("SELECT * FROM products");
+			using var reader = await cmd.ExecuteReaderAsync();
+			return await FromReaderAsync(reader);
+		}
 
         public async Task<List<Barcode>> GetBarcodes()
         {

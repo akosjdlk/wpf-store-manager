@@ -5,165 +5,165 @@ using System.Runtime.CompilerServices;
 
 namespace StoreManager.Classes
 {
-    [AttributeUsage(AttributeTargets.Property)]
-    public class DbFieldAttribute : Attribute
-    {
-        public string? ColumnName { get; }
-        public DbFieldAttribute(string? columnName = null)
-        {
-            ColumnName = columnName;
-        }
-    }
+	[AttributeUsage(AttributeTargets.Property, Inherited = true)]
+	public class DbFieldAttribute(string columnName) : Attribute
+	{
+		public string ColumnName { get; } = columnName;
+	}
 
-    [AttributeUsage(AttributeTargets.Property)]
-    public class AutoIncrementAttribute : Attribute { }
+	[AttributeUsage(AttributeTargets.Property)]
+	public class AutoIncrementAttribute : Attribute { }
 
 
-    public abstract class BaseModel<TSelf> where TSelf: BaseModel<TSelf>, new()
-    {
-        protected readonly List<string> _edited = [];
+	public abstract class BaseModel<TSelf> where TSelf : BaseModel<TSelf>, new()
+	{
+		protected readonly List<string> _edited = [];
 
-        public BaseModel() { }
+		protected abstract string TableName { get; }
 
-        protected abstract string TableName { get; }
-        protected static string ValidateInput(string input, int length)
-        {
-            input = input.Trim();
-            if (input.Length > length)
-                throw new ArgumentException("Too long");
-            return input;
-        }
+		private static readonly ConcurrentDictionary<Type, PropertyInfo[]> _dbFieldsCache = new();
+		private static readonly ConcurrentDictionary<Type, PropertyInfo?> _autoFieldCache = new();
 
-        private static readonly ConcurrentDictionary<Type, PropertyInfo[]> _dbFieldsCache = new();
+		protected PropertyInfo[] GetDbFields()
+		{
+			var fields = _dbFieldsCache.GetOrAdd(typeof(TSelf), t =>
+				[.. t.GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(p => p.GetCustomAttribute<DbFieldAttribute>() != null)]
+			);
+			return fields;
+		}
 
-        protected PropertyInfo[] GetDbFields()
-        {
-            return _dbFieldsCache.GetOrAdd(GetType(), t =>
-                t.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                .Where(p => Attribute.IsDefined(p, typeof(DbFieldAttribute)))
-                .ToArray()
-            );
-        }
+		private static PropertyInfo? GetAutoIncrementField()
+		{
+			return _autoFieldCache.GetOrAdd(typeof(TSelf), t =>
+				t.GetProperties(BindingFlags.Instance | BindingFlags.Public)
+				 .FirstOrDefault(p => p.GetCustomAttribute<AutoIncrementAttribute>() != null)
+			);
+		}
 
-        private static readonly ConcurrentDictionary<Type, PropertyInfo?> _autoFieldCache = new();
+		public static async Task<List<TSelf>> FromReaderAsync(DbDataReader reader)
+		{
+			var list = new List<TSelf>();
+			var fields = new TSelf().GetDbFields();
 
-        private PropertyInfo? GetAutoIncrementField()
-        {
-            return _autoFieldCache.GetOrAdd(GetType(), t =>
-                t.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                 .FirstOrDefault(p => Attribute.IsDefined(p, typeof(AutoIncrementAttribute)))
-            );
-        }
+			var map = fields.ToDictionary(
+				p => p.GetCustomAttribute<DbFieldAttribute>()!.ColumnName,
+				p => p
+			);
 
-        public static async Task<List<TSelf>> FromReaderAsync(DbDataReader reader)
-        {
-            var list = new List<TSelf>();
-            var fields = new TSelf().GetDbFields();
+			while (await reader.ReadAsync())
+			{
+				var obj = new TSelf();
 
-            var map = fields.ToDictionary(
-                p => (p.GetCustomAttribute<DbFieldAttribute>()?.ColumnName ?? p.Name).ToLower(),
-                p => p
-            );
+				for (int i = 0; i < reader.FieldCount; i++)
+				{
+					var col = reader.GetName(i);
+					if (!map.TryGetValue(col, out var prop))
+						continue;
 
-            while (await reader.ReadAsync())
-            {
-                var obj = new TSelf();
 
-                for (int i = 0; i < reader.FieldCount; i++)
-                {
-                    string col = reader.GetName(i).ToLower();
-                    if (!map.TryGetValue(col, out var prop))
-                        continue;
+					var value = await reader.IsDBNullAsync(i) ? null : reader.GetValue(i);
+					prop.SetValue(obj, value);
+				}
 
-                    object? value = await reader.IsDBNullAsync(i) ? null : reader.GetValue(i);
-                    prop.SetValue(obj, value);
-                }
+				list.Add(obj);
+			}
 
-                list.Add(obj);
-            }
+			return list;
+		}
 
-            return list;
-        }
+		public static async Task<TSelf?> FromFirstRowAsync(DbDataReader reader)
+		{
+			if (!await reader.ReadAsync())
+				return null;
 
-        protected void Set<T>(ref T field, T value, [CallerMemberName] string propName = "")
-        {
-            if (!EqualityComparer<T>.Default.Equals(field, value))
-            {
-                field = value;
-                _edited.Add(propName.ToLower());
-            }
-        }
-        public static async Task<TSelf?> FromFirstRowAsync(DbDataReader reader)
-        {
-            if (!await reader.ReadAsync())
-                return null;
+			var obj = new TSelf();
+			var fields = obj.GetDbFields();
 
-            var obj = new TSelf();
-            var fields = obj.GetDbFields();
+			var map = fields.ToDictionary(
+				p => p.GetCustomAttribute<DbFieldAttribute>()!.ColumnName.ToLower(),
+				p => p
+			);
 
-            var map = fields.ToDictionary(
-                p => (p.GetCustomAttribute<DbFieldAttribute>()?.ColumnName ?? p.Name).ToLower(),
-                p => p
-            );
+			for (int i = 0; i < reader.FieldCount; i++)
+			{
+				var col = reader.GetName(i).ToLower();
+				if (!map.TryGetValue(col, out var prop))
+					continue;
 
-            for (int i = 0; i < reader.FieldCount; i++)
-            {
-                string col = reader.GetName(i).ToLower();
-                if (!map.TryGetValue(col, out var prop))
-                    continue;
+				var value = await reader.IsDBNullAsync(i) ? null : reader.GetValue(i);
+				prop.SetValue(obj, value);
+			}
 
-                object? value = await reader.IsDBNullAsync(i) ? null : reader.GetValue(i);
-                prop.SetValue(obj, value);
-            }
+			return obj;
+		}
 
-            return obj;
-        }
+		protected void Set<T>(ref T field, T value, [CallerMemberName] string propName = "")
+		{
+			if (!EqualityComparer<T>.Default.Equals(field, value))
+			{
+				field = value;
+				_edited.Add(propName.ToLower());
+			}
+		}
 
-        public async Task Save()
-        {
-            // adatok
-            var autoField = GetAutoIncrementField();
-            var fields = GetDbFields().Where(p => p != autoField);
+		protected static string ValidateInput(string input, int length)
+		{
+			input = input.Trim();
+			if (input.Length > length)
+				throw new ArgumentException("Too long");
+			return input;
+		}
 
-            var columns = string.Join(", ", fields.Select(p => p.Name.ToLower()));
-            var parameters = string.Join(", ", fields.Select(p => "@" + p.Name.ToLower()));
+		public async Task Save()
+		{
+			var autoField = BaseModel<TSelf>.GetAutoIncrementField();
+			var fields = GetDbFields().Where(p => p != autoField);
 
-            // query building
-            string updates = string.Join(", ",
-                _edited.Select(k => $"{k} = VALUES({k})")
-            );
+			var columns = string.Join(", ",
+				fields.Select(p => p.GetCustomAttribute<DbFieldAttribute>()!.ColumnName)
+			);
 
-            string query = $@"
-            INSERT INTO {TableName} ({columns})
-            VALUES ({parameters})";
+			var parameters = string.Join(", ",
+				fields.Select(p => "@" + p.GetCustomAttribute<DbFieldAttribute>()!.ColumnName)
+			);
 
-            if (!string.IsNullOrWhiteSpace(updates))
-                query += $"\nON DUPLICATE KEY UPDATE {updates}";
+			var update = string.Join(", ",
+				_edited.Select(k =>
+				{
+					var prop = GetDbFields().First(p => p.Name.Equals(k));
+					var col = prop.GetCustomAttribute<DbFieldAttribute>()!.ColumnName;
+					return $"{col} = {col}";
+				})
+			);
 
-            // parameterek
-            using var cmd = await Database.GetCommandAsync(query);
+			var sql = $"INSERT INTO {TableName} ({columns}) VALUES ({parameters})";
+			if (update.Length > 0)
+				sql += $" ON DUPLICATE KEY UPDATE {update}";
 
-            foreach (var prop in fields)
-            {
-                cmd.Parameters.AddWithValue("@" + prop.Name.ToLower(), prop.GetValue(this));
-            }
+			using var cmd = await Database.GetCommandAsync(sql);
 
-            await cmd.ExecuteNonQueryAsync();
+			foreach (var p in fields)
+			{
+				var col = p.GetCustomAttribute<DbFieldAttribute>()!.ColumnName;
+				cmd.Parameters.AddWithValue("@" + col, p.GetValue(this));
+			}
 
-            // auto_increment fetchelese
-            var currentValue = autoField?.GetValue(this);
+			await cmd.ExecuteNonQueryAsync();
 
-            if (autoField != null &&
-                (currentValue == null || Convert.ToInt64(currentValue) == 0))
-            {
-                using var idCmd = cmd.Connection!.CreateCommand();
-                idCmd.CommandText = "SELECT LAST_INSERT_ID();";
+			if (autoField != null &&
+				(autoField.GetValue(this) == null ||
+				 Convert.ToInt64(autoField.GetValue(this)) == 0))
+			{
+				using var idCmd = cmd.Connection!.CreateCommand();
+				idCmd.CommandText = "SELECT LAST_INSERT_ID()";
+				var id = await idCmd.ExecuteScalarAsync();
+				autoField.SetValue(this, Convert.ChangeType(id, autoField.PropertyType));
+			}
 
-                var newId = await idCmd.ExecuteScalarAsync();
-                autoField.SetValue(this, Convert.ChangeType(newId, autoField.PropertyType));
-            }
-
-            _edited.Clear();
-        }
-    }
+			_edited.Clear();
+		}
+		public override string ToString() {
+			return $"{typeof(TSelf).Name.Title()}({string.Join(", ", GetDbFields().Select(f => $"{f.Name}={f.GetValue(this)}"))})";
+		}
+	}
 }
