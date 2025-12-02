@@ -5,10 +5,573 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:StoreManager"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="768" d:DesignWidth="1366"
       Title="CashierPage">
 
-    <Grid>
+    <Page.Resources>
+        <!-- Modern Color Palette -->
+        <SolidColorBrush x:Key="PrimaryColor" Color="#2563EB"/>
+        <SolidColorBrush x:Key="SuccessColor" Color="#10B981"/>
+        <SolidColorBrush x:Key="DangerColor" Color="#EF4444"/>
+        <SolidColorBrush x:Key="WarningColor" Color="#F59E0B"/>
+        <SolidColorBrush x:Key="BackgroundColor" Color="#F9FAFB"/>
+        <SolidColorBrush x:Key="CardBackground" Color="White"/>
+        <SolidColorBrush x:Key="TextPrimary" Color="#111827"/>
+        <SolidColorBrush x:Key="TextSecondary" Color="#6B7280"/>
+        <SolidColorBrush x:Key="BorderColor" Color="#E5E7EB"/>
         
+        <!-- Modern Button Style -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Secondary Button Style -->
+        <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{StaticResource BorderColor}"
+                                BorderThickness="1"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#F3F4F6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Number Pad Button Style -->
+        <Style x:Key="NumPadButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="{StaticResource CardBackground}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="MinHeight" Value="60"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{StaticResource BorderColor}"
+                                BorderThickness="1"
+                                CornerRadius="12"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource PrimaryColor}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- TextBox Style -->
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="{StaticResource CardBackground}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                          Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+                                <Setter TargetName="border" Property="BorderThickness" Value="2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="{StaticResource BackgroundColor}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*" MinWidth="380"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left Panel - Product List & Search -->
+        <Grid Grid.Column="0" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
+                <TextBlock Text="Pénztár" 
+                           FontSize="28" 
+                           FontWeight="Bold" 
+                           Foreground="{StaticResource TextPrimary}"
+                           VerticalAlignment="Center"/>
+                <Button Content="← Vissza" 
+                        Style="{StaticResource SecondaryButton}" 
+                        Margin="20,0,0,0"
+                        Click="BackButton_Click"/>
+            </StackPanel>
+
+            <!-- Search Bar with Dropdown -->
+            <Border Grid.Row="1" 
+                    Background="{StaticResource CardBackground}" 
+                    CornerRadius="12" 
+                    Padding="16"
+                    Margin="0,0,0,16">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.05" Color="#000000"/>
+                </Border.Effect>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBox x:Name="BarcodeTextBox" 
+                             Grid.Column="0"
+                             Style="{StaticResource ModernTextBox}"
+                             FontSize="16"
+                             Padding="16,12"
+                             KeyDown="BarcodeTextBox_KeyDown"
+                             TextChanged="BarcodeTextBox_TextChanged"/>
+                    
+                    <TextBlock Grid.Column="0" 
+                               Text="🔍 Vonalkód, cikkszám vagy termék név keresése..." 
+                               Foreground="{StaticResource TextSecondary}"
+                               Margin="20,0,0,0"
+                               VerticalAlignment="Center"
+                               IsHitTestVisible="False">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=BarcodeTextBox}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+
+                    <Button Grid.Column="1" 
+                            Content="Keresés" 
+                            Style="{StaticResource ModernButton}"
+                            Margin="12,0,0,0"
+                            MinWidth="100"
+                            Click="SearchButton_Click"/>
+
+                    <!-- Search Results Popup -->
+                    <Popup x:Name="SearchPopup"
+                           Grid.Row="1"
+                           Grid.ColumnSpan="2"
+                           PlacementTarget="{Binding ElementName=BarcodeTextBox}"
+                           Placement="Bottom"
+                           StaysOpen="False"
+                           AllowsTransparency="True"
+                           MaxHeight="300">
+                        <Border Background="{StaticResource CardBackground}"
+                                BorderBrush="{StaticResource BorderColor}"
+                                BorderThickness="1"
+                                CornerRadius="8"
+                                Margin="0,4,0,0">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.1" Color="#000000"/>
+                            </Border.Effect>
+                            <ListBox x:Name="SearchResultsListBox"
+                                     BorderThickness="0"
+                                     Background="Transparent"
+                                     SelectionChanged="SearchResultsListBox_SelectionChanged"
+                                     KeyDown="SearchResultsListBox_KeyDown"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="12,8" 
+                                                Background="Transparent"
+                                                BorderThickness="0,0,0,1"
+                                                BorderBrush="{StaticResource BorderColor}">
+                                            <TextBlock Text="{Binding DisplayText}" 
+                                                       FontSize="14"
+                                                       TextWrapping="Wrap"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="Padding" Value="0"/>
+                                        <Setter Property="Margin" Value="0"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#F3F4F6"/>
+                                            </Trigger>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="{StaticResource PrimaryColor}"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                            </ListBox>
+                        </Border>
+                    </Popup>
+                </Grid>
+            </Border>
+
+            <!-- Shopping Cart -->
+            <Border Grid.Row="2" 
+                    Background="{StaticResource CardBackground}" 
+                    CornerRadius="12">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.05" Color="#000000"/>
+                </Border.Effect>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Cart Header -->
+                    <Border Grid.Row="0" 
+                            Background="#F9FAFB" 
+                            CornerRadius="12,12,0,0"
+                            Padding="16">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="60"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Termék" FontWeight="SemiBold" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock Grid.Column="1" Text="Mennyiség" FontWeight="SemiBold" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="Egységár" FontWeight="SemiBold" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Right"/>
+                            <TextBlock Grid.Column="3" Text="Összeg" FontWeight="SemiBold" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Cart Items -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl x:Name="CartItemsControl" Margin="16,8">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="{StaticResource BorderColor}" 
+                                            BorderThickness="0,0,0,1" 
+                                            Padding="0,12"
+                                            Margin="0,4">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="3*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="60"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Product Name with Code -->
+                                            <TextBlock Grid.Column="0" 
+                                                       Text="{Binding DisplayName}" 
+                                                       FontSize="14" 
+                                                       FontWeight="Medium"
+                                                       Foreground="{StaticResource TextPrimary}"
+                                                       VerticalAlignment="Center"
+                                                       TextWrapping="Wrap"/>
+
+                                            <!-- Quantity -->
+                                            <StackPanel Grid.Column="1" 
+                                                        Orientation="Horizontal" 
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center">
+                                                <Button Content="-" 
+                                                        Width="28" Height="28"
+                                                        Style="{StaticResource SecondaryButton}"
+                                                        Padding="0"
+                                                        FontSize="16"
+                                                        Click="DecreaseQuantity_Click"
+                                                        Tag="{Binding}"/>
+                                                <TextBlock Text="{Binding Quantity}" 
+                                                           Margin="12,0"
+                                                           FontWeight="SemiBold"
+                                                           VerticalAlignment="Center"
+                                                           MinWidth="30"
+                                                           TextAlignment="Center"/>
+                                                <Button Content="+" 
+                                                        Width="28" Height="28"
+                                                        Style="{StaticResource SecondaryButton}"
+                                                        Padding="0"
+                                                        FontSize="16"
+                                                        Click="IncreaseQuantity_Click"
+                                                        Tag="{Binding}"/>
+                                            </StackPanel>
+
+                                            <!-- Unit Price -->
+                                            <TextBlock Grid.Column="2" 
+                                                       Text="{Binding UnitPrice, StringFormat={}{0:N0} Ft}" 
+                                                       FontSize="14"
+                                                       Foreground="{StaticResource TextSecondary}"
+                                                       HorizontalAlignment="Right"
+                                                       VerticalAlignment="Center"/>
+
+                                            <!-- Total Price -->
+                                            <TextBlock Grid.Column="3" 
+                                                       Text="{Binding TotalPrice, StringFormat={}{0:N0} Ft}" 
+                                                       FontSize="14"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource TextPrimary}"
+                                                       HorizontalAlignment="Right"
+                                                       VerticalAlignment="Center"/>
+
+                                            <!-- Remove Button -->
+                                            <Button Grid.Column="4" 
+                                                    Content="🗑" 
+                                                    Width="32" Height="32"
+                                                    Style="{StaticResource SecondaryButton}"
+                                                    Padding="0"
+                                                    FontSize="16"
+                                                    HorizontalAlignment="Center"
+                                                    Click="RemoveItem_Click"
+                                                    Tag="{Binding}"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <!-- Empty Cart Message -->
+                    <StackPanel Grid.Row="1" 
+                                x:Name="EmptyCartPanel"
+                                VerticalAlignment="Center" 
+                                HorizontalAlignment="Center">
+                        <TextBlock Text="🛒" 
+                                   FontSize="48" 
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,16"/>
+                        <TextBlock Text="A kosár üres" 
+                                   FontSize="18" 
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextSecondary}"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Kezdj el termékeket hozzáadni!" 
+                                   FontSize="14" 
+                                   Foreground="{StaticResource TextSecondary}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,8,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Right Panel - Total & Payment -->
+        <Grid Grid.Column="1" Margin="0,20,20,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Total Card -->
+            <Border Grid.Row="0" 
+                    Background="{StaticResource CardBackground}" 
+                    CornerRadius="12" 
+                    Padding="24"
+                    Margin="0,0,0,16">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.05" Color="#000000"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="Végösszeg" 
+                               FontSize="14" 
+                               Foreground="{StaticResource TextSecondary}"
+                               Margin="0,0,0,8"/>
+                    <TextBlock x:Name="TotalAmountText" 
+                               Text="0 Ft" 
+                               FontSize="42" 
+                               FontWeight="Bold"
+                               Foreground="{StaticResource TextPrimary}"/>
+                    
+                    <Separator Margin="0,16" Background="{StaticResource BorderColor}"/>
+                    
+                    <!-- VAT Breakdown -->
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="ÁFA tartalom:" 
+                                   FontSize="14" 
+                                   Foreground="{StaticResource TextSecondary}"/>
+                        <TextBlock x:Name="VatAmountText" 
+                                   Grid.Column="1"
+                                   Text="0 Ft" 
+                                   FontSize="14" 
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextSecondary}"/>
+                    </Grid>
+                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Tételek száma:" 
+                                   FontSize="14" 
+                                   Foreground="{StaticResource TextSecondary}"/>
+                        <TextBlock x:Name="ItemCountText" 
+                                   Grid.Column="1"
+                                   Text="0" 
+                                   FontSize="14" 
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextSecondary}"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Number Pad -->
+            <Border Grid.Row="1" 
+                    Background="{StaticResource CardBackground}" 
+                    CornerRadius="12" 
+                    Padding="16">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.05" Color="#000000"/>
+                </Border.Effect>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" 
+                               Text="Kapott összeg" 
+                               FontSize="12" 
+                               Foreground="{StaticResource TextSecondary}"
+                               Margin="4,0,0,8"/>
+
+                    <!-- Quick Amount Input -->
+                    <TextBox x:Name="QuickAmountTextBox" 
+                             Grid.Row="1"
+                             Style="{StaticResource ModernTextBox}"
+                             FontSize="20"
+                             FontWeight="Bold"
+                             TextAlignment="Right"
+                             IsReadOnly="True"
+                             Margin="0,0,0,12"/>
+
+                    <!-- Number Pad Grid -->
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Button Grid.Row="0" Grid.Column="0" Content="7" Style="{StaticResource NumPadButton}" Click="NumPad_Click"/>
+                        <Button Grid.Row="0" Grid.Column="1" Content="8" Style="{StaticResource NumPadButton}" Click="NumPad_Click"/>
+                        <Button Grid.Row="0" Grid.Column="2" Content="9" Style="{StaticResource NumPadButton}" Click="NumPad_Click"/>
+                        
+                        <Button Grid.Row="1" Grid.Column="0" Content="4" Style="{StaticResource NumPadButton}" Click="NumPad_Click"/>
+                        <Button Grid.Row="1" Grid.Column="1" Content="5" Style="{StaticResource NumPadButton}" Click="NumPad_Click"/>
+                        <Button Grid.Row="1" Grid.Column="2" Content="6" Style="{StaticResource NumPadButton}" Click="NumPad_Click"/>
+                        
+                        <Button Grid.Row="2" Grid.Column="0" Content="1" Style="{StaticResource NumPadButton}" Click="NumPad_Click"/>
+                        <Button Grid.Row="2" Grid.Column="1" Content="2" Style="{StaticResource NumPadButton}" Click="NumPad_Click"/>
+                        <Button Grid.Row="2" Grid.Column="2" Content="3" Style="{StaticResource NumPadButton}" Click="NumPad_Click"/>
+                        
+                        <Button Grid.Row="3" Grid.Column="0" Content="⌫" Style="{StaticResource NumPadButton}" Click="NumPadClear_Click"/>
+                        <Button Grid.Row="3" Grid.Column="1" Content="0" Style="{StaticResource NumPadButton}" Click="NumPad_Click"/>
+                        <Button Grid.Row="3" Grid.Column="2" Content="00" Style="{StaticResource NumPadButton}" Click="NumPad_Click"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- Action Buttons -->
+            <StackPanel Grid.Row="2" Margin="0,16,0,0">
+                <Button Content="💳 Fizetés" 
+                        Style="{StaticResource ModernButton}"
+                        Background="{StaticResource SuccessColor}"
+                        FontSize="18"
+                        Padding="0,20"
+                        Click="PayButton_Click"/>
+                
+                <Button Content="🗑 Kosár törlése" 
+                        Style="{StaticResource SecondaryButton}"
+                        Margin="0,12,0,0"
+                        Click="ClearCart_Click"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>

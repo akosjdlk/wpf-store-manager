@@ -73,11 +73,10 @@ namespace StoreManager
             }
 
             User? user = await User.GetUser(Convert.ToInt16(identifier));
+
             if (user == null)
             {
-                // Error
-                Console.WriteLine("Error");
-                return;
+                throw new Exception("Hibás felhasználó.");
             }
 
             if (_loginMode == LoginMode.Cashier)

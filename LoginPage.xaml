@@ -163,7 +163,7 @@
                 Background="{StaticResource CardBackground}"
                 CornerRadius="20"
                 Padding="50,60"
-                MaxWidth="500"
+                Width="500"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
                 Margin="40">
