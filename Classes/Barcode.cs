@@ -6,8 +6,6 @@ namespace StoreManager.Classes
     {
         protected override string TableName => "barcodes";
 
-        // PRIMARY KEY --------------------------------------------------------
-
         [DbField("code")]
         public string Code
         {
@@ -16,8 +14,6 @@ namespace StoreManager.Classes
         }
         private string _code = string.Empty;
 
-        // FOREIGN KEY --------------------------------------------------------
-
         [DbField("product_id")]
         public int ProductId
         {
@@ -25,8 +21,6 @@ namespace StoreManager.Classes
             set => Set(ref _productId, value);
         }
         private int _productId;
-
-        // ----------------------------------------------------------
 
         private static string ValidateCode(string code)
         {
@@ -41,8 +35,6 @@ namespace StoreManager.Classes
 
             if (code.Length > 13)
                 throw new ArgumentException("Barcode cannot exceed 13 characters");
-
-            // TODO: add EAN-13 checksum validation
 
             return code;
         }

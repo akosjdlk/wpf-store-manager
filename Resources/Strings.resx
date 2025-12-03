@@ -288,4 +288,162 @@ Visszajáró: {2} Ft</value>
     <value>Ft</value>
     <comment>Currency symbol</comment>
   </data>
+  <data name="LoginPage_errorInvalidUser" xml:space="preserve">
+    <value>Hibás felhasználó</value>
+    <comment>Invalid user error message</comment>
+  </data>
+  <data name="LoginPage_errorNoStorageAccess" xml:space="preserve">
+    <value>Ez a felhasználó nem érheti el a raktár felületet</value>
+    <comment>No storage access error message</comment>
+  </data>
+  <data name="LoginPage_errorWrongPassword" xml:space="preserve">
+    <value>Ehhez a felhasználóhoz nem ez a jelszó tartozik</value>
+    <comment>Wrong password error message</comment>
+  </data>
+  <data name="LoginPage_errorTitle" xml:space="preserve">
+    <value>Hiba</value>
+    <comment>Error title</comment>
+  </data>
+  <data name="MessageBox_buttonOK" xml:space="preserve">
+    <value>OK</value>
+    <comment>OK button text</comment>
+  </data>
+  <data name="MessageBox_buttonCancel" xml:space="preserve">
+    <value>Mégse</value>
+    <comment>Cancel button text</comment>
+  </data>
+  <data name="MessageBox_buttonYes" xml:space="preserve">
+    <value>Igen</value>
+    <comment>Yes button text</comment>
+  </data>
+  <data name="MessageBox_buttonNo" xml:space="preserve">
+    <value>Nem</value>
+    <comment>No button text</comment>
+  </data>
+	<data name="StoragePage_title" xml:space="preserve">
+    <value>Raktárkezelés</value>
+  </data>
+	<data name="StoragePage_backButton" xml:space="preserve">
+    <value>← Vissza</value>
+  </data>
+	<data name="StoragePage_searchPlaceholder" xml:space="preserve">
+    <value>🔍 Cikkszám vagy termék név keresése...</value>
+  </data>
+	<data name="StoragePage_searchButton" xml:space="preserve">
+    <value>Keresés</value>
+  </data>
+	<data name="StoragePage_addNewButton" xml:space="preserve">
+    <value>➕ Új termék</value>
+  </data>
+	<data name="StoragePage_idColumn" xml:space="preserve">
+    <value>Cikkszám</value>
+  </data>
+	<data name="StoragePage_nameColumn" xml:space="preserve">
+    <value>Megnevezés</value>
+  </data>
+	<data name="StoragePage_unitColumn" xml:space="preserve">
+    <value>Egység</value>
+  </data>
+	<data name="StoragePage_stockColumn" xml:space="preserve">
+    <value>Készlet</value>
+  </data>
+	<data name="StoragePage_supplierPriceColumn" xml:space="preserve">
+    <value>Beszerzési ár</value>
+  </data>
+	<data name="StoragePage_salePriceColumn" xml:space="preserve">
+    <value>Eladási ár</value>
+  </data>
+	<data name="StoragePage_actionsColumn" xml:space="preserve">
+    <value>Műveletek</value>
+  </data>
+	<data name="StoragePage_editTooltip" xml:space="preserve">
+    <value>Szerkesztés</value>
+  </data>
+	<data name="StoragePage_deleteTooltip" xml:space="preserve">
+    <value>Törlés</value>
+  </data>
+	<data name="StoragePage_emptyListTitle" xml:space="preserve">
+    <value>Nincs találat</value>
+  </data>
+	<data name="StoragePage_emptyListMessage" xml:space="preserve">
+    <value>Próbálj más keresési feltételeket használni!</value>
+  </data>
+	<data name="StoragePage_editPanelTitle" xml:space="preserve">
+    <value>Termék adatok</value>
+  </data>
+	<data name="StoragePage_productIdLabel" xml:space="preserve">
+    <value>Cikkszám</value>
+  </data>
+	<data name="StoragePage_productNameLabel" xml:space="preserve">
+    <value>Megnevezés*</value>
+  </data>
+	<data name="StoragePage_unitLabel" xml:space="preserve">
+    <value>Egység</value>
+  </data>
+	<data name="StoragePage_stockLabel" xml:space="preserve">
+    <value>Készlet</value>
+  </data>
+	<data name="StoragePage_supplierPriceLabel" xml:space="preserve">
+    <value>Beszerzési ár</value>
+  </data>
+	<data name="StoragePage_salePriceLabel" xml:space="preserve">
+    <value>Eladási ár</value>
+  </data>
+	<data name="StoragePage_vatPercentageLabel" xml:space="preserve">
+    <value>ÁFA %</value>
+  </data>
+	<data name="StoragePage_fractionableLabel" xml:space="preserve">
+    <value>Törtegység</value>
+  </data>
+	<data name="StoragePage_saveButton" xml:space="preserve">
+    <value>💾 Mentés</value>
+  </data>
+	<data name="StoragePage_cancelButton" xml:space="preserve">
+    <value>Mégse</value>
+  </data>
+	<data name="StoragePage_newProductId" xml:space="preserve">
+    <value>(új termék)</value>
+  </data>
+	<data name="StoragePage_loadProductsError" xml:space="preserve">
+    <value>Hiba a termékek betöltése közben: {0}</value>
+  </data>
+	<data name="StoragePage_errorTitle" xml:space="preserve">
+    <value>Hiba</value>
+  </data>
+	<data name="StoragePage_warningTitle" xml:space="preserve">
+    <value>Figyelmeztetés</value>
+  </data>
+	<data name="StoragePage_successTitle" xml:space="preserve">
+    <value>Sikeres művelet</value>
+  </data>
+	<data name="StoragePage_confirmationTitle" xml:space="preserve">
+    <value>Megerősítés</value>
+  </data>
+	<data name="StoragePage_nameRequired" xml:space="preserve">
+    <value>A megnevezés mező kötelező!</value>
+  </data>
+	<data name="StoragePage_invalidStock" xml:space="preserve">
+    <value>Érvénytelen készlet érték!</value>
+  </data>
+	<data name="StoragePage_invalidPrice" xml:space="preserve">
+    <value>Érvénytelen ár érték!</value>
+  </data>
+	<data name="StoragePage_invalidVat" xml:space="preserve">
+    <value>Érvénytelen ÁFA érték!</value>
+  </data>
+	<data name="StoragePage_saveSuccess" xml:space="preserve">
+    <value>Termék sikeresen mentve!</value>
+  </data>
+	<data name="StoragePage_saveError" xml:space="preserve">
+    <value>Hiba a mentés során: {0}</value>
+  </data>
+	<data name="StoragePage_deleteConfirmation" xml:space="preserve">
+    <value>Biztosan törli ezt a terméket: {0}?</value>
+  </data>
+	<data name="StoragePage_deleteNotImplemented" xml:space="preserve">
+    <value>A törlés funkció még nem került implementálásra.</value>
+  </data>
+	<data name="StoragePage_deleteError" xml:space="preserve">
+    <value>Hiba a törlés során: {0}</value>
+  </data>
 </root>

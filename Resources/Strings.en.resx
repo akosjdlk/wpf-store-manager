@@ -301,4 +301,162 @@ Change: {2} Ft</value>
     <value>Ft</value>
     <comment>Currency symbol</comment>
   </data>
+  <data name="LoginPage_errorInvalidUser" xml:space="preserve">
+    <value>Invalid user</value>
+    <comment>Invalid user error message</comment>
+  </data>
+  <data name="LoginPage_errorNoStorageAccess" xml:space="preserve">
+    <value>This user cannot access the warehouse interface</value>
+    <comment>No storage access error message</comment>
+  </data>
+  <data name="LoginPage_errorWrongPassword" xml:space="preserve">
+    <value>This password does not belong to this user</value>
+    <comment>Wrong password error message</comment>
+  </data>
+  <data name="LoginPage_errorTitle" xml:space="preserve">
+    <value>Error</value>
+    <comment>Error title</comment>
+  </data>
+  <data name="MessageBox_buttonOK" xml:space="preserve">
+    <value>OK</value>
+    <comment>OK button text</comment>
+  </data>
+  <data name="MessageBox_buttonCancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>Cancel button text</comment>
+  </data>
+  <data name="MessageBox_buttonYes" xml:space="preserve">
+    <value>Yes</value>
+    <comment>Yes button text</comment>
+  </data>
+  <data name="MessageBox_buttonNo" xml:space="preserve">
+    <value>No</value>
+    <comment>No button text</comment>
+  </data>
+	<data name="StoragePage_title" xml:space="preserve">
+    <value>Warehouse Management</value>
+  </data>
+	<data name="StoragePage_backButton" xml:space="preserve">
+    <value>← Back</value>
+  </data>
+	<data name="StoragePage_searchPlaceholder" xml:space="preserve">
+    <value>🔍 Search by product ID or name...</value>
+  </data>
+	<data name="StoragePage_searchButton" xml:space="preserve">
+    <value>Search</value>
+  </data>
+	<data name="StoragePage_addNewButton" xml:space="preserve">
+    <value>➕ New Product</value>
+  </data>
+	<data name="StoragePage_idColumn" xml:space="preserve">
+    <value>ID</value>
+  </data>
+	<data name="StoragePage_nameColumn" xml:space="preserve">
+    <value>Name</value>
+  </data>
+	<data name="StoragePage_unitColumn" xml:space="preserve">
+    <value>Unit</value>
+  </data>
+	<data name="StoragePage_stockColumn" xml:space="preserve">
+    <value>Stock</value>
+  </data>
+	<data name="StoragePage_supplierPriceColumn" xml:space="preserve">
+    <value>Purchase Price</value>
+  </data>
+	<data name="StoragePage_salePriceColumn" xml:space="preserve">
+    <value>Sale Price</value>
+  </data>
+	<data name="StoragePage_actionsColumn" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+	<data name="StoragePage_editTooltip" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+	<data name="StoragePage_deleteTooltip" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+	<data name="StoragePage_emptyListTitle" xml:space="preserve">
+    <value>No results</value>
+  </data>
+	<data name="StoragePage_emptyListMessage" xml:space="preserve">
+    <value>Try using different search criteria!</value>
+  </data>
+	<data name="StoragePage_editPanelTitle" xml:space="preserve">
+    <value>Product Details</value>
+  </data>
+	<data name="StoragePage_productIdLabel" xml:space="preserve">
+    <value>Product ID</value>
+  </data>
+	<data name="StoragePage_productNameLabel" xml:space="preserve">
+    <value>Name*</value>
+  </data>
+	<data name="StoragePage_unitLabel" xml:space="preserve">
+    <value>Unit</value>
+  </data>
+	<data name="StoragePage_stockLabel" xml:space="preserve">
+    <value>Stock</value>
+  </data>
+	<data name="StoragePage_supplierPriceLabel" xml:space="preserve">
+    <value>Purchase Price</value>
+  </data>
+	<data name="StoragePage_salePriceLabel" xml:space="preserve">
+    <value>Sale Price</value>
+  </data>
+	<data name="StoragePage_vatPercentageLabel" xml:space="preserve">
+    <value>VAT %</value>
+  </data>
+	<data name="StoragePage_fractionableLabel" xml:space="preserve">
+    <value>Fractional Unit</value>
+  </data>
+	<data name="StoragePage_saveButton" xml:space="preserve">
+    <value>💾 Save</value>
+  </data>
+	<data name="StoragePage_cancelButton" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+	<data name="StoragePage_newProductId" xml:space="preserve">
+    <value>(new product)</value>
+  </data>
+	<data name="StoragePage_loadProductsError" xml:space="preserve">
+    <value>Error loading products: {0}</value>
+  </data>
+	<data name="StoragePage_errorTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+	<data name="StoragePage_warningTitle" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+	<data name="StoragePage_successTitle" xml:space="preserve">
+    <value>Success</value>
+  </data>
+	<data name="StoragePage_confirmationTitle" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
+	<data name="StoragePage_nameRequired" xml:space="preserve">
+    <value>Name field is required!</value>
+  </data>
+	<data name="StoragePage_invalidStock" xml:space="preserve">
+    <value>Invalid stock value!</value>
+  </data>
+	<data name="StoragePage_invalidPrice" xml:space="preserve">
+    <value>Invalid price value!</value>
+  </data>
+	<data name="StoragePage_invalidVat" xml:space="preserve">
+    <value>Invalid VAT value!</value>
+  </data>
+	<data name="StoragePage_saveSuccess" xml:space="preserve">
+    <value>Product saved successfully!</value>
+  </data>
+	<data name="StoragePage_saveError" xml:space="preserve">
+    <value>Error saving product: {0}</value>
+  </data>
+	<data name="StoragePage_deleteConfirmation" xml:space="preserve">
+    <value>Are you sure you want to delete this product: {0}?</value>
+  </data>
+	<data name="StoragePage_deleteNotImplemented" xml:space="preserve">
+    <value>Delete function is not yet implemented.</value>
+  </data>
+	<data name="StoragePage_deleteError" xml:space="preserve">
+    <value>Error deleting product: {0}</value>
+  </data>
 </root>

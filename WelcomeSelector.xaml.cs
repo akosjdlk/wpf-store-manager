@@ -16,9 +16,6 @@ using WPFLocalizeExtension.Engine;
 
 namespace StoreManager
 {
-    /// <summary>
-    /// Interaction logic for WelcomeSelector.xaml
-    /// </summary>
     public partial class WelcomeSelector : Page
     {
         private Frame _frame;
@@ -44,13 +41,11 @@ namespace StoreManager
 
         private void CashierCard_Click(object sender, MouseButtonEventArgs e)
         {
-            // Navigálás a LoginPage-re azonosító bekéréssel
             _frame.Navigate(new LoginPage(_frame, LoginPage.LoginMode.Cashier, typeof(CashierPage)));
         }
 
         private void StorageCard_Click(object sender, MouseButtonEventArgs e)
         {
-            // Navigálás a LoginPage-re jelszó bekéréssel
             _frame.Navigate(new LoginPage(_frame, LoginPage.LoginMode.Storage, typeof(StoragePage)));
         }
     }

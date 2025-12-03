@@ -17,9 +17,6 @@ using StoreManager.Classes;
 
 namespace StoreManager
 {
-    /// <summary>
-    /// Interaction logic for LoginPage.xaml
-    /// </summary>
     public partial class LoginPage : Page
     {
         private Frame _frame;
@@ -40,24 +37,47 @@ namespace StoreManager
             _targetPageType = targetPageType;
 
             ConfigureLoginMode();
+
+            LocalizeDictionary.Instance.PropertyChanged += OnLanguageChanged;
+            
+            Loaded += (s, e) => ConfigureLoginMode();
+            
+            Unloaded += (s, e) => LocalizeDictionary.Instance.PropertyChanged -= OnLanguageChanged;
+        }
+
+        private void OnLanguageChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(LocalizeDictionary.Culture))
+            {
+                ConfigureLoginMode();
+            }
         }
 
         private void ConfigureLoginMode()
         {
             if (_loginMode == LoginMode.Cashier)
             {
-                TitleText.Text = LocalizeDictionary.Instance.GetLocalizedObject("StoreManager", "Resources.Strings", "LoginPage_cashierTitle", LocalizeDictionary.Instance.Culture).ToString();
+                TitleText.Text = LocalizeDictionary.Instance.GetLocalizedObject("StoreManager", "Resources.Strings", "LoginPage_cashierTitle", LocalizeDictionary.Instance.Culture)?.ToString() ?? "Cashier Login";
                 IdentifierPanel.Visibility = Visibility.Visible;
                 PasswordPanel.Visibility = Visibility.Collapsed;
                 IdentifierTextBox.Focus();
             }
             else
             {
-                TitleText.Text = LocalizeDictionary.Instance.GetLocalizedObject("StoreManager", "Resources.Strings", "LoginPage_storageTitle", LocalizeDictionary.Instance.Culture).ToString();
+                TitleText.Text = LocalizeDictionary.Instance.GetLocalizedObject("StoreManager", "Resources.Strings", "LoginPage_storageTitle", LocalizeDictionary.Instance.Culture)?.ToString() ?? "Storage Login";
                 IdentifierPanel.Visibility = Visibility.Visible;
                 PasswordPanel.Visibility = Visibility.Visible;
                 PasswordBox.Focus();
             }
+        }
+
+        private string GetLocalizedString(string key)
+        {
+            return LocalizeDictionary.Instance.GetLocalizedObject(
+                "StoreManager",
+                "Resources.Strings",
+                key,
+                LocalizeDictionary.Instance.Culture)?.ToString() ?? key;
         }
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
@@ -76,7 +96,9 @@ namespace StoreManager
 
             if (user == null)
             {
-                MessageBox.Show($"Hibás felhasználó", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.ShowError(
+                    GetLocalizedString("LoginPage_errorInvalidUser"),
+                    GetLocalizedString("LoginPage_errorTitle"));
                 return;
             }
 
@@ -84,7 +106,7 @@ namespace StoreManager
             {
                 NavigateToTargetPage(identifier);
             }
-            else // Storage
+            else
             {
                 string password = PasswordBox.Password;
                 
@@ -95,12 +117,16 @@ namespace StoreManager
                 }
                 if (!user.CanAccessStorage)
                 {
-                    MessageBox.Show($"Ez a felhasznalo nem erheti el a raktar feluletet", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                    CustomMessageBox.ShowError(
+                        GetLocalizedString("LoginPage_errorNoStorageAccess"),
+                        GetLocalizedString("LoginPage_errorTitle"));
                     return;
                 }
                 if (user.Password != password)
                 {
-                    MessageBox.Show($"Ehhez a felhasználóhoz nem ez a jelszó tartozik.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                    CustomMessageBox.ShowError(
+                        GetLocalizedString("LoginPage_errorWrongPassword"),
+                        GetLocalizedString("LoginPage_errorTitle"));
                     return;
                 }
                 NavigateToTargetPage(password);
@@ -115,6 +141,11 @@ namespace StoreManager
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
+            while (_frame.CanGoBack)
+            {
+                _frame.RemoveBackEntry();
+            }
+            
             _frame.Navigate(new WelcomeSelector(_frame));
         }
     }

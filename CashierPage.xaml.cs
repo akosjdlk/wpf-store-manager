@@ -20,9 +20,6 @@ using WPFLocalizeExtension.Engine;
 
 namespace StoreManager
 {
-    /// <summary>
-    /// Interaction logic for CashierPage.xaml
-    /// </summary>
     public partial class CashierPage : Page
     {
         private Frame _frame;
@@ -40,11 +37,22 @@ namespace StoreManager
             SearchResultsListBox.ItemsSource = _searchResults;
             _cartItems.CollectionChanged += (s, e) => UpdateTotals();
 
+            LocalizeDictionary.Instance.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(LocalizeDictionary.Culture))
+                {
+                    UpdateTotals();
+                    foreach (var item in _cartItems)
+                    {
+                        item.RefreshFormatting();
+                    }
+                }
+            };
+
             Loaded += async (s, e) => await LoadProducts();
             BarcodeTextBox.Focus();
         }
 
-        // Helper method to get localized string
         private string GetLocalizedString(string key)
         {
             return LocalizeDictionary.Instance.GetLocalizedObject(
@@ -60,7 +68,6 @@ namespace StoreManager
             {
                 _allProducts = await Product.GetAll();
                 
-                // Load barcodes for all products
                 foreach (var product in _allProducts)
                 {
                     var barcodes = await product.GetBarcodes();
@@ -72,11 +79,9 @@ namespace StoreManager
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
+                CustomMessageBox.ShowError(
                     string.Format(GetLocalizedString("CashierPage_loadProductsError"), ex.Message),
-                    GetLocalizedString("CashierPage_errorTitle"),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                    GetLocalizedString("CashierPage_errorTitle"));
             }
         }
 
@@ -86,7 +91,6 @@ namespace StoreManager
             {
                 if (_searchResults.Count > 0)
                 {
-                    // Ha van találat a dropdown-ban, azt adjuk hozzá
                     AddProductToCart(_searchResults[0].Product);
                     BarcodeTextBox.Clear();
                     SearchPopup.IsOpen = false;
@@ -119,7 +123,6 @@ namespace StoreManager
                 return;
             }
 
-            // Valós idejű keresés
             PerformSearch(searchText);
         }
 
@@ -127,7 +130,6 @@ namespace StoreManager
         {
             _searchResults.Clear();
 
-            // Keresés vonalkód, ID vagy név alapján
             var results = _allProducts
                 .Where(p => 
                     p.Id.ToString().Contains(searchText) ||
@@ -185,14 +187,12 @@ namespace StoreManager
 
             Product? product = null;
 
-            // Search by barcode first
             if (_barcodeToProduct.TryGetValue(searchText, out var foundProduct))
             {
                 product = foundProduct;
             }
             else
             {
-                // Search by ID or name
                 if (int.TryParse(searchText, out int productId))
                 {
                     product = _allProducts.FirstOrDefault(p => p.Id == productId);
@@ -214,11 +214,9 @@ namespace StoreManager
             }
             else
             {
-                MessageBox.Show(
+                CustomMessageBox.ShowWarning(
                     GetLocalizedString("CashierPage_productNotFound"),
-                    GetLocalizedString("CashierPage_warningTitle"),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+                    GetLocalizedString("CashierPage_warningTitle"));
                 BarcodeTextBox.SelectAll();
             }
         }
@@ -233,7 +231,7 @@ namespace StoreManager
             }
             else
             {
-                _cartItems.Add(new CartItem
+                var newItem = new CartItem
                 {
                     ProductId = product.Id,
                     ProductCode = product.Id.ToString(),
@@ -242,10 +240,20 @@ namespace StoreManager
                     UnitPrice = product.SalePrice,
                     Unit = product.Unit,
                     VatPercentage = product.VatPercentage
-                });
+                };
+                newItem.PropertyChanged += CartItem_PropertyChanged;
+                _cartItems.Add(newItem);
             }
 
             UpdateEmptyCartVisibility();
+        }
+
+        private void CartItem_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(CartItem.Quantity) || e.PropertyName == nameof(CartItem.UnitPrice))
+            {
+                UpdateTotals();
+            }
         }
 
         private void IncreaseQuantity_Click(object sender, RoutedEventArgs e)
@@ -266,6 +274,7 @@ namespace StoreManager
                 }
                 else
                 {
+                    item.PropertyChanged -= CartItem_PropertyChanged;
                     _cartItems.Remove(item);
                     UpdateEmptyCartVisibility();
                 }
@@ -276,6 +285,7 @@ namespace StoreManager
         {
             if (sender is Button button && button.Tag is CartItem item)
             {
+                item.PropertyChanged -= CartItem_PropertyChanged;
                 _cartItems.Remove(item);
                 UpdateEmptyCartVisibility();
             }
@@ -319,18 +329,15 @@ namespace StoreManager
         {
             if (_cartItems.Count == 0)
             {
-                MessageBox.Show(
+                CustomMessageBox.ShowWarning(
                     GetLocalizedString("CashierPage_emptyCartWarning"),
-                    GetLocalizedString("CashierPage_warningTitle"),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+                    GetLocalizedString("CashierPage_warningTitle"));
                 return;
             }
 
             decimal total = _cartItems.Sum(item => item.TotalPrice);
             decimal paidAmount = 0;
 
-            // Számológépről beütött összeg használata
             if (!string.IsNullOrWhiteSpace(QuickAmountTextBox.Text))
             {
                 if (decimal.TryParse(QuickAmountTextBox.Text, out decimal amount))
@@ -339,7 +346,6 @@ namespace StoreManager
                 }
             }
 
-            // Ha nincs megadva összeg, pontosan fizetés
             if (paidAmount == 0)
             {
                 paidAmount = total;
@@ -349,30 +355,25 @@ namespace StoreManager
 
             if (change < 0)
             {
-                MessageBox.Show(
+                CustomMessageBox.ShowError(
                     string.Format(GetLocalizedString("CashierPage_insufficientAmount"), 
                         total, paidAmount, Math.Abs(change)),
-                    GetLocalizedString("CashierPage_errorTitle"),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                    GetLocalizedString("CashierPage_errorTitle"));
                 return;
             }
 
-            var result = MessageBox.Show(
+            var result = CustomMessageBox.ShowQuestion(
                 string.Format(GetLocalizedString("CashierPage_paymentConfirmation"),
                     total, paidAmount, change),
                 GetLocalizedString("CashierPage_paymentConfirmationTitle"),
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
+                CustomMessageBox.MessageBoxButtons.YesNo);
 
             if (result == MessageBoxResult.Yes)
             {
-                MessageBox.Show(
+                CustomMessageBox.ShowSuccess(
                     string.Format(GetLocalizedString("CashierPage_paymentSuccess"),
                         total, paidAmount, change),
-                    GetLocalizedString("CashierPage_successTitle"),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                    GetLocalizedString("CashierPage_successTitle"));
 
                 ClearCart();
             }
@@ -383,11 +384,10 @@ namespace StoreManager
             if (_cartItems.Count == 0)
                 return;
 
-            var result = MessageBox.Show(
+            var result = CustomMessageBox.ShowQuestion(
                 GetLocalizedString("CashierPage_clearCartConfirmation"),
                 GetLocalizedString("CashierPage_confirmationTitle"),
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
+                CustomMessageBox.MessageBoxButtons.YesNo);
 
             if (result == MessageBoxResult.Yes)
             {
@@ -397,6 +397,10 @@ namespace StoreManager
 
         private void ClearCart()
         {
+            foreach (var item in _cartItems)
+            {
+                item.PropertyChanged -= CartItem_PropertyChanged;
+            }
             _cartItems.Clear();
             QuickAmountTextBox.Clear();
             UpdateEmptyCartVisibility();
@@ -405,7 +409,12 @@ namespace StoreManager
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            _frame.GoBack();
+            while (_frame.CanGoBack)
+            {
+                _frame.RemoveBackEntry();
+            }
+            
+            _frame.Navigate(new WelcomeSelector(_frame));
         }
     }
 
@@ -436,7 +445,6 @@ namespace StoreManager
             set { _productCode = value; OnPropertyChanged(); OnPropertyChanged(nameof(DisplayName)); }
         }
 
-        // Kombinált megjelenítés: cikkszám + név
         public string DisplayName => $"[{ProductCode}] {ProductName}";
 
         public decimal Quantity
@@ -473,7 +481,6 @@ namespace StoreManager
 
         public decimal TotalPrice => Quantity * UnitPrice;
 
-        // Lokalizált formázott árak
         public string UnitPriceFormatted => $"{UnitPrice:N0} {GetCurrencyString()}";
         public string TotalPriceFormatted => $"{TotalPrice:N0} {GetCurrencyString()}";
 
@@ -487,6 +494,12 @@ namespace StoreManager
         }
 
         public int VatPercentage { get; set; }
+
+        public void RefreshFormatting()
+        {
+            OnPropertyChanged(nameof(UnitPriceFormatted));
+            OnPropertyChanged(nameof(TotalPriceFormatted));
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

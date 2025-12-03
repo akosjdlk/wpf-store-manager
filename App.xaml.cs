@@ -34,7 +34,6 @@ namespace StoreManager
     {
         protected async void Application_Startup(object sender, StartupEventArgs e)
         {
-            //(await Product.GetAll()).PrettyPrint();
 		}
 
     }

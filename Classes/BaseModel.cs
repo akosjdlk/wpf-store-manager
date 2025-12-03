@@ -133,9 +133,9 @@ namespace StoreManager.Classes
 			var update = string.Join(", ",
 				_edited.Select(k =>
 				{
-					var prop = GetDbFields().First(p => p.Name.Equals(k));
+					var prop = GetDbFields().First(p => p.Name.Equals(k, StringComparison.OrdinalIgnoreCase));
 					var col = prop.GetCustomAttribute<DbFieldAttribute>()!.ColumnName;
-					return $"{col} = {col}";
+					return $"{col} = @{col}";
 				})
 			);
 

@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StoreManager"
         mc:Ignorable="d"
-        Title="MainWindow" MinHeight="1000" MinWidth="1400">
+        Title="Storage Manager Software" MinHeight="1000" MinWidth="1400">
     <Grid>
         <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
-
+        
+        
     </Grid>
 </Window>

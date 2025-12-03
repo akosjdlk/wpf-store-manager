@@ -19,7 +19,7 @@ namespace StoreManager.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Strings {
@@ -361,6 +361,42 @@ namespace StoreManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hibás felhasználó.
+        /// </summary>
+        internal static string LoginPage_errorInvalidUser {
+            get {
+                return ResourceManager.GetString("LoginPage_errorInvalidUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ez a felhasználó nem érheti el a raktár felületet.
+        /// </summary>
+        internal static string LoginPage_errorNoStorageAccess {
+            get {
+                return ResourceManager.GetString("LoginPage_errorNoStorageAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hiba.
+        /// </summary>
+        internal static string LoginPage_errorTitle {
+            get {
+                return ResourceManager.GetString("LoginPage_errorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ehhez a felhasználóhoz nem ez a jelszó tartozik.
+        /// </summary>
+        internal static string LoginPage_errorWrongPassword {
+            get {
+                return ResourceManager.GetString("LoginPage_errorWrongPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Azonosító.
         /// </summary>
         internal static string LoginPage_identifierLabel {
@@ -411,6 +447,420 @@ namespace StoreManager.Resources {
         internal static string LoginPage_storageTitle {
             get {
                 return ResourceManager.GetString("LoginPage_storageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mégse.
+        /// </summary>
+        internal static string MessageBox_buttonCancel {
+            get {
+                return ResourceManager.GetString("MessageBox_buttonCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nem.
+        /// </summary>
+        internal static string MessageBox_buttonNo {
+            get {
+                return ResourceManager.GetString("MessageBox_buttonNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        internal static string MessageBox_buttonOK {
+            get {
+                return ResourceManager.GetString("MessageBox_buttonOK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Igen.
+        /// </summary>
+        internal static string MessageBox_buttonYes {
+            get {
+                return ResourceManager.GetString("MessageBox_buttonYes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Műveletek.
+        /// </summary>
+        internal static string StoragePage_actionsColumn {
+            get {
+                return ResourceManager.GetString("StoragePage_actionsColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ➕ Új termék.
+        /// </summary>
+        internal static string StoragePage_addNewButton {
+            get {
+                return ResourceManager.GetString("StoragePage_addNewButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ← Vissza.
+        /// </summary>
+        internal static string StoragePage_backButton {
+            get {
+                return ResourceManager.GetString("StoragePage_backButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mégse.
+        /// </summary>
+        internal static string StoragePage_cancelButton {
+            get {
+                return ResourceManager.GetString("StoragePage_cancelButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Megerősítés.
+        /// </summary>
+        internal static string StoragePage_confirmationTitle {
+            get {
+                return ResourceManager.GetString("StoragePage_confirmationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Biztosan törli ezt a terméket: {0}?.
+        /// </summary>
+        internal static string StoragePage_deleteConfirmation {
+            get {
+                return ResourceManager.GetString("StoragePage_deleteConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hiba a törlés során: {0}.
+        /// </summary>
+        internal static string StoragePage_deleteError {
+            get {
+                return ResourceManager.GetString("StoragePage_deleteError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A törlés funkció még nem került implementálásra..
+        /// </summary>
+        internal static string StoragePage_deleteNotImplemented {
+            get {
+                return ResourceManager.GetString("StoragePage_deleteNotImplemented", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Törlés.
+        /// </summary>
+        internal static string StoragePage_deleteTooltip {
+            get {
+                return ResourceManager.GetString("StoragePage_deleteTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Termék adatok.
+        /// </summary>
+        internal static string StoragePage_editPanelTitle {
+            get {
+                return ResourceManager.GetString("StoragePage_editPanelTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Szerkesztés.
+        /// </summary>
+        internal static string StoragePage_editTooltip {
+            get {
+                return ResourceManager.GetString("StoragePage_editTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Próbálj más keresési feltételeket használni!.
+        /// </summary>
+        internal static string StoragePage_emptyListMessage {
+            get {
+                return ResourceManager.GetString("StoragePage_emptyListMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nincs találat.
+        /// </summary>
+        internal static string StoragePage_emptyListTitle {
+            get {
+                return ResourceManager.GetString("StoragePage_emptyListTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hiba.
+        /// </summary>
+        internal static string StoragePage_errorTitle {
+            get {
+                return ResourceManager.GetString("StoragePage_errorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Törtegység.
+        /// </summary>
+        internal static string StoragePage_fractionableLabel {
+            get {
+                return ResourceManager.GetString("StoragePage_fractionableLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cikkszám.
+        /// </summary>
+        internal static string StoragePage_idColumn {
+            get {
+                return ResourceManager.GetString("StoragePage_idColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Érvénytelen ár érték!.
+        /// </summary>
+        internal static string StoragePage_invalidPrice {
+            get {
+                return ResourceManager.GetString("StoragePage_invalidPrice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Érvénytelen készlet érték!.
+        /// </summary>
+        internal static string StoragePage_invalidStock {
+            get {
+                return ResourceManager.GetString("StoragePage_invalidStock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Érvénytelen ÁFA érték!.
+        /// </summary>
+        internal static string StoragePage_invalidVat {
+            get {
+                return ResourceManager.GetString("StoragePage_invalidVat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hiba a termékek betöltése közben: {0}.
+        /// </summary>
+        internal static string StoragePage_loadProductsError {
+            get {
+                return ResourceManager.GetString("StoragePage_loadProductsError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Megnevezés.
+        /// </summary>
+        internal static string StoragePage_nameColumn {
+            get {
+                return ResourceManager.GetString("StoragePage_nameColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A megnevezés mező kötelező!.
+        /// </summary>
+        internal static string StoragePage_nameRequired {
+            get {
+                return ResourceManager.GetString("StoragePage_nameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (új termék).
+        /// </summary>
+        internal static string StoragePage_newProductId {
+            get {
+                return ResourceManager.GetString("StoragePage_newProductId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cikkszám.
+        /// </summary>
+        internal static string StoragePage_productIdLabel {
+            get {
+                return ResourceManager.GetString("StoragePage_productIdLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Megnevezés*.
+        /// </summary>
+        internal static string StoragePage_productNameLabel {
+            get {
+                return ResourceManager.GetString("StoragePage_productNameLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eladási ár.
+        /// </summary>
+        internal static string StoragePage_salePriceColumn {
+            get {
+                return ResourceManager.GetString("StoragePage_salePriceColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eladási ár.
+        /// </summary>
+        internal static string StoragePage_salePriceLabel {
+            get {
+                return ResourceManager.GetString("StoragePage_salePriceLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 💾 Mentés.
+        /// </summary>
+        internal static string StoragePage_saveButton {
+            get {
+                return ResourceManager.GetString("StoragePage_saveButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hiba a mentés során: {0}.
+        /// </summary>
+        internal static string StoragePage_saveError {
+            get {
+                return ResourceManager.GetString("StoragePage_saveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Termék sikeresen mentve!.
+        /// </summary>
+        internal static string StoragePage_saveSuccess {
+            get {
+                return ResourceManager.GetString("StoragePage_saveSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keresés.
+        /// </summary>
+        internal static string StoragePage_searchButton {
+            get {
+                return ResourceManager.GetString("StoragePage_searchButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🔍 Cikkszám vagy termék név keresése....
+        /// </summary>
+        internal static string StoragePage_searchPlaceholder {
+            get {
+                return ResourceManager.GetString("StoragePage_searchPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Készlet.
+        /// </summary>
+        internal static string StoragePage_stockColumn {
+            get {
+                return ResourceManager.GetString("StoragePage_stockColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Készlet.
+        /// </summary>
+        internal static string StoragePage_stockLabel {
+            get {
+                return ResourceManager.GetString("StoragePage_stockLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sikeres művelet.
+        /// </summary>
+        internal static string StoragePage_successTitle {
+            get {
+                return ResourceManager.GetString("StoragePage_successTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Beszerzési ár.
+        /// </summary>
+        internal static string StoragePage_supplierPriceColumn {
+            get {
+                return ResourceManager.GetString("StoragePage_supplierPriceColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Beszerzési ár.
+        /// </summary>
+        internal static string StoragePage_supplierPriceLabel {
+            get {
+                return ResourceManager.GetString("StoragePage_supplierPriceLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Raktárkezelés.
+        /// </summary>
+        internal static string StoragePage_title {
+            get {
+                return ResourceManager.GetString("StoragePage_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Egység.
+        /// </summary>
+        internal static string StoragePage_unitColumn {
+            get {
+                return ResourceManager.GetString("StoragePage_unitColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Egység.
+        /// </summary>
+        internal static string StoragePage_unitLabel {
+            get {
+                return ResourceManager.GetString("StoragePage_unitLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ÁFA %.
+        /// </summary>
+        internal static string StoragePage_vatPercentageLabel {
+            get {
+                return ResourceManager.GetString("StoragePage_vatPercentageLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Figyelmeztetés.
+        /// </summary>
+        internal static string StoragePage_warningTitle {
+            get {
+                return ResourceManager.GetString("StoragePage_warningTitle", resourceCulture);
             }
         }
         
