@@ -74,7 +74,10 @@ namespace StoreManager.Classes
 		public static async Task<TSelf?> FromFirstRowAsync(DbDataReader reader)
 		{
 			if (!await reader.ReadAsync())
+			{
+				await reader.CloseAsync();
 				return null;
+			}
 
 			var obj = new TSelf();
 			var fields = obj.GetDbFields();
@@ -93,8 +96,8 @@ namespace StoreManager.Classes
 				var value = await reader.IsDBNullAsync(i) ? null : reader.GetValue(i);
 				prop.SetValue(obj, value);
 			}
-
-			return obj;
+			await reader.CloseAsync();
+            return obj;
 		}
 
 		protected void Set<T>(ref T field, T value, [CallerMemberName] string propName = "")

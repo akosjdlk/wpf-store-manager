@@ -50,8 +50,7 @@ namespace StoreManager.Classes
         public static async Task<List<Barcode>> GetAll()
         {
             using var cmd = await Database.GetCommandAsync("SELECT * FROM barcodes");
-            using var reader = await cmd.ExecuteReaderAsync();
-            return await FromReaderAsync(reader);
+            return await FromReaderAsync(await cmd.ExecuteReaderAsync());
         }
     }
 }

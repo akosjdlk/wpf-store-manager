@@ -89,9 +89,7 @@ namespace StoreManager.Classes
 
             using var cmd = await Database.GetCommandAsync("SELECT * FROM barcodes WHERE product_id = @product_id");
             cmd.Parameters.AddWithValue("@product_id", Id);
-
-            using var reader = await cmd.ExecuteReaderAsync();
-            return await Barcode.FromReaderAsync(reader);
+            return await Barcode.FromReaderAsync(await cmd.ExecuteReaderAsync());
         }
     }
 }

@@ -6,13 +6,6 @@ namespace StoreManager.Classes
     internal static class Database
     {
         private const string ConnectionString = "Server=db-par-02.apollopanel.com;User ID=u208217_G0LNIAe1KA;Password=sd5JqlpVljm+EOT=IEzta6np;Database=s208217_akos;ConnectionTimeout=30";
-        public static async Task RunFileAsync(string filePath)
-        {
-            using var sr = new StreamReader(filePath);
-            string content = sr.ReadToEnd();
-            using var cmd = await GetCommandAsync(content);
-            await cmd.ExecuteNonQueryAsync();
-        }
 
         public static async Task<MySqlCommand> GetCommandAsync(string? query = null)
         {
