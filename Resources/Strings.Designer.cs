@@ -61,6 +61,279 @@ namespace StoreManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ← Vissza.
+        /// </summary>
+        internal static string CashierPage_backButton {
+            get {
+                return ResourceManager.GetString("CashierPage_backButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🗑 Kosár törlése.
+        /// </summary>
+        internal static string CashierPage_clearCartButton {
+            get {
+                return ResourceManager.GetString("CashierPage_clearCartButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Biztosan törli a kosár tartalmát?.
+        /// </summary>
+        internal static string CashierPage_clearCartConfirmation {
+            get {
+                return ResourceManager.GetString("CashierPage_clearCartConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Megerősítés.
+        /// </summary>
+        internal static string CashierPage_confirmationTitle {
+            get {
+                return ResourceManager.GetString("CashierPage_confirmationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ft.
+        /// </summary>
+        internal static string CashierPage_currency {
+            get {
+                return ResourceManager.GetString("CashierPage_currency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kezdj el termékeket hozzáadni!.
+        /// </summary>
+        internal static string CashierPage_emptyCartMessage {
+            get {
+                return ResourceManager.GetString("CashierPage_emptyCartMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A kosár üres.
+        /// </summary>
+        internal static string CashierPage_emptyCartTitle {
+            get {
+                return ResourceManager.GetString("CashierPage_emptyCartTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A kosár üres!.
+        /// </summary>
+        internal static string CashierPage_emptyCartWarning {
+            get {
+                return ResourceManager.GetString("CashierPage_emptyCartWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hiba.
+        /// </summary>
+        internal static string CashierPage_errorTitle {
+            get {
+                return ResourceManager.GetString("CashierPage_errorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nem elegendő összeg!
+        ///
+        ///Fizetendő: {0} Ft
+        ///Kapott: {1} Ft
+        ///Hiányzik: {2} Ft.
+        /// </summary>
+        internal static string CashierPage_insufficientAmount {
+            get {
+                return ResourceManager.GetString("CashierPage_insufficientAmount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tételek száma:.
+        /// </summary>
+        internal static string CashierPage_itemCountLabel {
+            get {
+                return ResourceManager.GetString("CashierPage_itemCountLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hiba a termékek betöltése közben: {0}.
+        /// </summary>
+        internal static string CashierPage_loadProductsError {
+            get {
+                return ResourceManager.GetString("CashierPage_loadProductsError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 💳 Fizetés.
+        /// </summary>
+        internal static string CashierPage_payButton {
+            get {
+                return ResourceManager.GetString("CashierPage_payButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fizetendő összeg: {0} Ft
+        ///Kapott összeg: {1} Ft
+        ///Visszajáró: {2} Ft
+        ///
+        ///Biztosan véglegesíti a tranzakciót?.
+        /// </summary>
+        internal static string CashierPage_paymentConfirmation {
+            get {
+                return ResourceManager.GetString("CashierPage_paymentConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fizetés megerősítése.
+        /// </summary>
+        internal static string CashierPage_paymentConfirmationTitle {
+            get {
+                return ResourceManager.GetString("CashierPage_paymentConfirmationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fizetés sikeres!
+        ///
+        ///Végösszeg: {0} Ft
+        ///Kapott: {1} Ft
+        ///Visszajáró: {2} Ft.
+        /// </summary>
+        internal static string CashierPage_paymentSuccess {
+            get {
+                return ResourceManager.GetString("CashierPage_paymentSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Termék.
+        /// </summary>
+        internal static string CashierPage_productColumn {
+            get {
+                return ResourceManager.GetString("CashierPage_productColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Termék nem található!.
+        /// </summary>
+        internal static string CashierPage_productNotFound {
+            get {
+                return ResourceManager.GetString("CashierPage_productNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mennyiség.
+        /// </summary>
+        internal static string CashierPage_quantityColumn {
+            get {
+                return ResourceManager.GetString("CashierPage_quantityColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kapott összeg.
+        /// </summary>
+        internal static string CashierPage_receivedAmountLabel {
+            get {
+                return ResourceManager.GetString("CashierPage_receivedAmountLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keresés.
+        /// </summary>
+        internal static string CashierPage_searchButton {
+            get {
+                return ResourceManager.GetString("CashierPage_searchButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🔍 Vonalkód, cikkszám vagy termék név keresése....
+        /// </summary>
+        internal static string CashierPage_searchPlaceholder {
+            get {
+                return ResourceManager.GetString("CashierPage_searchPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sikeres tranzakció.
+        /// </summary>
+        internal static string CashierPage_successTitle {
+            get {
+                return ResourceManager.GetString("CashierPage_successTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pénztár.
+        /// </summary>
+        internal static string CashierPage_title {
+            get {
+                return ResourceManager.GetString("CashierPage_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Összeg.
+        /// </summary>
+        internal static string CashierPage_totalColumn {
+            get {
+                return ResourceManager.GetString("CashierPage_totalColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Végösszeg.
+        /// </summary>
+        internal static string CashierPage_totalLabel {
+            get {
+                return ResourceManager.GetString("CashierPage_totalLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Egységár.
+        /// </summary>
+        internal static string CashierPage_unitPriceColumn {
+            get {
+                return ResourceManager.GetString("CashierPage_unitPriceColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ÁFA tartalom:.
+        /// </summary>
+        internal static string CashierPage_vatLabel {
+            get {
+                return ResourceManager.GetString("CashierPage_vatLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Figyelmeztetés.
+        /// </summary>
+        internal static string CashierPage_warningTitle {
+            get {
+                return ResourceManager.GetString("CashierPage_warningTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vissza.
         /// </summary>
         internal static string LoginPage_backButton {

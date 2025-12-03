@@ -76,7 +76,8 @@ namespace StoreManager
 
             if (user == null)
             {
-                throw new Exception("Hibás felhasználó.");
+                MessageBox.Show($"Hibás felhasználó", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
 
             if (_loginMode == LoginMode.Cashier)
@@ -92,21 +93,22 @@ namespace StoreManager
                     ErrorText.Visibility = Visibility.Visible;
                     return;
                 }
-                if (user.CanAccessStorage && user.Password == password)
+                if (!user.CanAccessStorage)
                 {
-                    NavigateToTargetPage(password);
-                } else
-                {
-                    Console.WriteLine("nem");
+                    MessageBox.Show($"Ez a felhasznalo nem erheti el a raktar feluletet", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
                 }
-                
-
+                if (user.Password != password)
+                {
+                    MessageBox.Show($"Ehhez a felhasználóhoz nem ez a jelszó tartozik.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                NavigateToTargetPage(password);
             }
         }
 
         private void NavigateToTargetPage(string credential)
         {
-            // Létrehozzuk a target page példányt a Frame paraméterrel
             var targetPage = Activator.CreateInstance(_targetPageType, _frame);
             _frame.Navigate(targetPage);
         }

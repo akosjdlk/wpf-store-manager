@@ -4,6 +4,9 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:StoreManager"
+      xmlns:lex="http://wpflocalizeextension.codeplex.com"
+      lex:ResxLocalizationProvider.DefaultAssembly="StoreManager"
+      lex:ResxLocalizationProvider.DefaultDictionary="Resources.Strings"
       mc:Ignorable="d" 
       d:DesignHeight="768" d:DesignWidth="1366"
       Title="CashierPage">
@@ -164,12 +167,12 @@
 
             <!-- Header -->
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
-                <TextBlock Text="Pénztár" 
+                <TextBlock Text="{lex:Loc CashierPage_title}" 
                            FontSize="28" 
                            FontWeight="Bold" 
                            Foreground="{StaticResource TextPrimary}"
                            VerticalAlignment="Center"/>
-                <Button Content="← Vissza" 
+                <Button Content="{lex:Loc CashierPage_backButton}" 
                         Style="{StaticResource SecondaryButton}" 
                         Margin="20,0,0,0"
                         Click="BackButton_Click"/>
@@ -203,7 +206,7 @@
                              TextChanged="BarcodeTextBox_TextChanged"/>
                     
                     <TextBlock Grid.Column="0" 
-                               Text="🔍 Vonalkód, cikkszám vagy termék név keresése..." 
+                               Text="{lex:Loc CashierPage_searchPlaceholder}" 
                                Foreground="{StaticResource TextSecondary}"
                                Margin="20,0,0,0"
                                VerticalAlignment="Center"
@@ -221,7 +224,7 @@
                     </TextBlock>
 
                     <Button Grid.Column="1" 
-                            Content="Keresés" 
+                            Content="{lex:Loc CashierPage_searchButton}" 
                             Style="{StaticResource ModernButton}"
                             Margin="12,0,0,0"
                             MinWidth="100"
@@ -310,10 +313,10 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="60"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="Termék" FontWeight="SemiBold" Foreground="{StaticResource TextSecondary}"/>
-                            <TextBlock Grid.Column="1" Text="Mennyiség" FontWeight="SemiBold" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Center"/>
-                            <TextBlock Grid.Column="2" Text="Egységár" FontWeight="SemiBold" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Right"/>
-                            <TextBlock Grid.Column="3" Text="Összeg" FontWeight="SemiBold" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Right"/>
+                            <TextBlock Grid.Column="0" Text="{lex:Loc CashierPage_productColumn}" FontWeight="SemiBold" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock Grid.Column="1" Text="{lex:Loc CashierPage_quantityColumn}" FontWeight="SemiBold" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="{lex:Loc CashierPage_unitPriceColumn}" FontWeight="SemiBold" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Right"/>
+                            <TextBlock Grid.Column="3" Text="{lex:Loc CashierPage_totalColumn}" FontWeight="SemiBold" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Right"/>
                         </Grid>
                     </Border>
 
@@ -373,7 +376,7 @@
 
                                             <!-- Unit Price -->
                                             <TextBlock Grid.Column="2" 
-                                                       Text="{Binding UnitPrice, StringFormat={}{0:N0} Ft}" 
+                                                       Text="{Binding UnitPriceFormatted}" 
                                                        FontSize="14"
                                                        Foreground="{StaticResource TextSecondary}"
                                                        HorizontalAlignment="Right"
@@ -381,7 +384,7 @@
 
                                             <!-- Total Price -->
                                             <TextBlock Grid.Column="3" 
-                                                       Text="{Binding TotalPrice, StringFormat={}{0:N0} Ft}" 
+                                                       Text="{Binding TotalPriceFormatted}" 
                                                        FontSize="14"
                                                        FontWeight="SemiBold"
                                                        Foreground="{StaticResource TextPrimary}"
@@ -414,12 +417,12 @@
                                    FontSize="48" 
                                    HorizontalAlignment="Center"
                                    Margin="0,0,0,16"/>
-                        <TextBlock Text="A kosár üres" 
+                        <TextBlock Text="{lex:Loc CashierPage_emptyCartTitle}" 
                                    FontSize="18" 
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource TextSecondary}"
                                    HorizontalAlignment="Center"/>
-                        <TextBlock Text="Kezdj el termékeket hozzáadni!" 
+                        <TextBlock Text="{lex:Loc CashierPage_emptyCartMessage}" 
                                    FontSize="14" 
                                    Foreground="{StaticResource TextSecondary}"
                                    HorizontalAlignment="Center"
@@ -447,12 +450,11 @@
                     <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.05" Color="#000000"/>
                 </Border.Effect>
                 <StackPanel>
-                    <TextBlock Text="Végösszeg" 
+                    <TextBlock Text="{lex:Loc CashierPage_totalLabel}" 
                                FontSize="14" 
                                Foreground="{StaticResource TextSecondary}"
                                Margin="0,0,0,8"/>
                     <TextBlock x:Name="TotalAmountText" 
-                               Text="0 Ft" 
                                FontSize="42" 
                                FontWeight="Bold"
                                Foreground="{StaticResource TextPrimary}"/>
@@ -465,12 +467,11 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="ÁFA tartalom:" 
+                        <TextBlock Text="{lex:Loc CashierPage_vatLabel}" 
                                    FontSize="14" 
                                    Foreground="{StaticResource TextSecondary}"/>
                         <TextBlock x:Name="VatAmountText" 
                                    Grid.Column="1"
-                                   Text="0 Ft" 
                                    FontSize="14" 
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource TextSecondary}"/>
@@ -481,7 +482,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Tételek száma:" 
+                        <TextBlock Text="{lex:Loc CashierPage_itemCountLabel}" 
                                    FontSize="14" 
                                    Foreground="{StaticResource TextSecondary}"/>
                         <TextBlock x:Name="ItemCountText" 
@@ -510,7 +511,7 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0" 
-                               Text="Kapott összeg" 
+                               Text="{lex:Loc CashierPage_receivedAmountLabel}" 
                                FontSize="12" 
                                Foreground="{StaticResource TextSecondary}"
                                Margin="4,0,0,8"/>
@@ -560,14 +561,14 @@
 
             <!-- Action Buttons -->
             <StackPanel Grid.Row="2" Margin="0,16,0,0">
-                <Button Content="💳 Fizetés" 
+                <Button Content="{lex:Loc CashierPage_payButton}" 
                         Style="{StaticResource ModernButton}"
                         Background="{StaticResource SuccessColor}"
                         FontSize="18"
                         Padding="0,20"
                         Click="PayButton_Click"/>
                 
-                <Button Content="🗑 Kosár törlése" 
+                <Button Content="{lex:Loc CashierPage_clearCartButton}" 
                         Style="{StaticResource SecondaryButton}"
                         Margin="0,12,0,0"
                         Click="ClearCart_Click"/>

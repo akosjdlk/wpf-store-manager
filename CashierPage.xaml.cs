@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using StoreManager.Classes;
+using WPFLocalizeExtension.Engine;
 
 namespace StoreManager
 {
@@ -43,6 +44,16 @@ namespace StoreManager
             BarcodeTextBox.Focus();
         }
 
+        // Helper method to get localized string
+        private string GetLocalizedString(string key)
+        {
+            return LocalizeDictionary.Instance.GetLocalizedObject(
+                "StoreManager",
+                "Resources.Strings",
+                key,
+                LocalizeDictionary.Instance.Culture)?.ToString() ?? key;
+        }
+
         private async Task LoadProducts()
         {
             try
@@ -61,7 +72,11 @@ namespace StoreManager
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Hiba a termékek betöltése közben: {ex.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    string.Format(GetLocalizedString("CashierPage_loadProductsError"), ex.Message),
+                    GetLocalizedString("CashierPage_errorTitle"),
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
@@ -199,7 +214,11 @@ namespace StoreManager
             }
             else
             {
-                MessageBox.Show("Termék nem található!", "Figyelmeztetés", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(
+                    GetLocalizedString("CashierPage_productNotFound"),
+                    GetLocalizedString("CashierPage_warningTitle"),
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
                 BarcodeTextBox.SelectAll();
             }
         }
@@ -269,8 +288,9 @@ namespace StoreManager
                 item.TotalPrice * item.VatPercentage / (100 + item.VatPercentage));
             int itemCount = _cartItems.Count;
 
-            TotalAmountText.Text = $"{total:N0} Ft";
-            VatAmountText.Text = $"{vatTotal:N0} Ft";
+            string currency = GetLocalizedString("CashierPage_currency");
+            TotalAmountText.Text = $"{total:N0} {currency}";
+            VatAmountText.Text = $"{vatTotal:N0} {currency}";
             ItemCountText.Text = itemCount.ToString();
         }
 
@@ -299,7 +319,11 @@ namespace StoreManager
         {
             if (_cartItems.Count == 0)
             {
-                MessageBox.Show("A kosár üres!", "Figyelmeztetés", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(
+                    GetLocalizedString("CashierPage_emptyCartWarning"),
+                    GetLocalizedString("CashierPage_warningTitle"),
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
                 return;
             }
 
@@ -326,26 +350,27 @@ namespace StoreManager
             if (change < 0)
             {
                 MessageBox.Show(
-                    $"Nem elegendő összeg!\n\nFizetendő: {total:N0} Ft\nKapott: {paidAmount:N0} Ft\nHiányzik: {Math.Abs(change):N0} Ft",
-                    "Hiba",
+                    string.Format(GetLocalizedString("CashierPage_insufficientAmount"), 
+                        total, paidAmount, Math.Abs(change)),
+                    GetLocalizedString("CashierPage_errorTitle"),
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
                 return;
             }
 
             var result = MessageBox.Show(
-                $"Fizetendő összeg: {total:N0} Ft\nKapott összeg: {paidAmount:N0} Ft\nVisszajáró: {change:N0} Ft\n\nBiztosan véglegesíti a tranzakciót?",
-                "Fizetés megerősítése",
+                string.Format(GetLocalizedString("CashierPage_paymentConfirmation"),
+                    total, paidAmount, change),
+                GetLocalizedString("CashierPage_paymentConfirmationTitle"),
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
 
             if (result == MessageBoxResult.Yes)
             {
-                // TODO: Save transaction to database
-                
                 MessageBox.Show(
-                    $"Fizetés sikeres!\n\nVégösszeg: {total:N0} Ft\nKapott: {paidAmount:N0} Ft\nVisszajáró: {change:N0} Ft",
-                    "Sikeres tranzakció",
+                    string.Format(GetLocalizedString("CashierPage_paymentSuccess"),
+                        total, paidAmount, change),
+                    GetLocalizedString("CashierPage_successTitle"),
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
@@ -359,8 +384,8 @@ namespace StoreManager
                 return;
 
             var result = MessageBox.Show(
-                "Biztosan törli a kosár tartalmát?",
-                "Megerősítés",
+                GetLocalizedString("CashierPage_clearCartConfirmation"),
+                GetLocalizedString("CashierPage_confirmationTitle"),
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
 
@@ -422,6 +447,8 @@ namespace StoreManager
                 _quantity = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(TotalPrice));
+                OnPropertyChanged(nameof(UnitPriceFormatted));
+                OnPropertyChanged(nameof(TotalPriceFormatted));
             }
         }
 
@@ -433,6 +460,8 @@ namespace StoreManager
                 _unitPrice = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(TotalPrice));
+                OnPropertyChanged(nameof(UnitPriceFormatted));
+                OnPropertyChanged(nameof(TotalPriceFormatted));
             }
         }
 
@@ -443,6 +472,19 @@ namespace StoreManager
         }
 
         public decimal TotalPrice => Quantity * UnitPrice;
+
+        // Lokalizált formázott árak
+        public string UnitPriceFormatted => $"{UnitPrice:N0} {GetCurrencyString()}";
+        public string TotalPriceFormatted => $"{TotalPrice:N0} {GetCurrencyString()}";
+
+        private static string GetCurrencyString()
+        {
+            return LocalizeDictionary.Instance.GetLocalizedObject(
+                "StoreManager",
+                "Resources.Strings",
+                "CashierPage_currency",
+                LocalizeDictionary.Instance.Culture)?.ToString() ?? "Ft";
+        }
 
         public int VatPercentage { get; set; }
 
@@ -457,6 +499,15 @@ namespace StoreManager
     public class SearchResultItem
     {
         public Product Product { get; set; } = null!;
-        public string DisplayText => $"[{Product.Id}] {Product.Name} - {Product.SalePrice:N0} Ft";
+        public string DisplayText => $"[{Product.Id}] {Product.Name} - {Product.SalePrice:N0} {GetCurrencyString()}";
+
+        private static string GetCurrencyString()
+        {
+            return LocalizeDictionary.Instance.GetLocalizedObject(
+                "StoreManager",
+                "Resources.Strings",
+                "CashierPage_currency",
+                LocalizeDictionary.Instance.Culture)?.ToString() ?? "Ft";
+        }
     }
 }

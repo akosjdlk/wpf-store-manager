@@ -169,4 +169,136 @@
     <value>Please fill in the field!</value>
     <comment>Error message for empty input</comment>
   </data>
+  
+  <!-- CashierPage strings -->
+  <data name="CashierPage_title" xml:space="preserve">
+    <value>Cashier</value>
+    <comment>Cashier page title</comment>
+  </data>
+  <data name="CashierPage_backButton" xml:space="preserve">
+    <value>← Back</value>
+    <comment>Back button</comment>
+  </data>
+  <data name="CashierPage_searchPlaceholder" xml:space="preserve">
+    <value>🔍 Search by barcode, product ID or name...</value>
+    <comment>Search placeholder text</comment>
+  </data>
+  <data name="CashierPage_searchButton" xml:space="preserve">
+    <value>Search</value>
+    <comment>Search button</comment>
+  </data>
+  <data name="CashierPage_productColumn" xml:space="preserve">
+    <value>Product</value>
+    <comment>Product column header</comment>
+  </data>
+  <data name="CashierPage_quantityColumn" xml:space="preserve">
+    <value>Quantity</value>
+    <comment>Quantity column header</comment>
+  </data>
+  <data name="CashierPage_unitPriceColumn" xml:space="preserve">
+    <value>Unit Price</value>
+    <comment>Unit price column header</comment>
+  </data>
+  <data name="CashierPage_totalColumn" xml:space="preserve">
+    <value>Total</value>
+    <comment>Total column header</comment>
+  </data>
+  <data name="CashierPage_emptyCartTitle" xml:space="preserve">
+    <value>Cart is empty</value>
+    <comment>Empty cart title</comment>
+  </data>
+  <data name="CashierPage_emptyCartMessage" xml:space="preserve">
+    <value>Start adding products!</value>
+    <comment>Empty cart message</comment>
+  </data>
+  <data name="CashierPage_totalLabel" xml:space="preserve">
+    <value>Total Amount</value>
+    <comment>Total amount label</comment>
+  </data>
+  <data name="CashierPage_vatLabel" xml:space="preserve">
+    <value>VAT included:</value>
+    <comment>VAT content label</comment>
+  </data>
+  <data name="CashierPage_itemCountLabel" xml:space="preserve">
+    <value>Number of items:</value>
+    <comment>Item count label</comment>
+  </data>
+  <data name="CashierPage_receivedAmountLabel" xml:space="preserve">
+    <value>Amount Received</value>
+    <comment>Received amount label</comment>
+  </data>
+  <data name="CashierPage_payButton" xml:space="preserve">
+    <value>💳 Pay</value>
+    <comment>Pay button</comment>
+  </data>
+  <data name="CashierPage_clearCartButton" xml:space="preserve">
+    <value>🗑 Clear Cart</value>
+    <comment>Clear cart button</comment>
+  </data>
+  
+  <!-- CashierPage MessageBox strings -->
+  <data name="CashierPage_errorTitle" xml:space="preserve">
+    <value>Error</value>
+    <comment>Error title</comment>
+  </data>
+  <data name="CashierPage_warningTitle" xml:space="preserve">
+    <value>Warning</value>
+    <comment>Warning title</comment>
+  </data>
+  <data name="CashierPage_confirmationTitle" xml:space="preserve">
+    <value>Confirmation</value>
+    <comment>Confirmation title</comment>
+  </data>
+  <data name="CashierPage_successTitle" xml:space="preserve">
+    <value>Transaction Successful</value>
+    <comment>Success title</comment>
+  </data>
+  <data name="CashierPage_loadProductsError" xml:space="preserve">
+    <value>Error loading products: {0}</value>
+    <comment>Products loading error message</comment>
+  </data>
+  <data name="CashierPage_productNotFound" xml:space="preserve">
+    <value>Product not found!</value>
+    <comment>Product not found message</comment>
+  </data>
+  <data name="CashierPage_emptyCartWarning" xml:space="preserve">
+    <value>The cart is empty!</value>
+    <comment>Empty cart warning</comment>
+  </data>
+  <data name="CashierPage_insufficientAmount" xml:space="preserve">
+    <value>Insufficient amount!
+
+Amount due: {0} Ft
+Received: {1} Ft
+Short: {2} Ft</value>
+    <comment>Insufficient amount error</comment>
+  </data>
+  <data name="CashierPage_paymentConfirmation" xml:space="preserve">
+    <value>Amount due: {0} Ft
+Amount received: {1} Ft
+Change: {2} Ft
+
+Do you want to complete the transaction?</value>
+    <comment>Payment confirmation message</comment>
+  </data>
+  <data name="CashierPage_paymentConfirmationTitle" xml:space="preserve">
+    <value>Payment Confirmation</value>
+    <comment>Payment confirmation title</comment>
+  </data>
+  <data name="CashierPage_paymentSuccess" xml:space="preserve">
+    <value>Payment successful!
+
+Total amount: {0} Ft
+Received: {1} Ft
+Change: {2} Ft</value>
+    <comment>Payment success message</comment>
+  </data>
+  <data name="CashierPage_clearCartConfirmation" xml:space="preserve">
+    <value>Are you sure you want to clear the cart?</value>
+    <comment>Clear cart confirmation</comment>
+  </data>
+  <data name="CashierPage_currency" xml:space="preserve">
+    <value>Ft</value>
+    <comment>Currency symbol</comment>
+  </data>
 </root>
