@@ -1,49 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
+using System.Globalization;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using StoreManager.Classes;
 using WPFLocalizeExtension.Engine;
 
 namespace StoreManager
 {
-    public partial class StoragePage : Page
+    public partial class StoragePage
     {
         private Frame _frame;
-        private ObservableCollection<ProductViewModel> _products = new();
+        private ObservableCollection<ProductViewModel> _products;
         private List<Product> _allProducts = new();
-        private Product? _currentEditProduct = null;
-        private bool _isAddingNew = false;
+        // precomputed lowercase search index for quick search
+        private List<(Product product, string idText, string nameLower)> _searchIndex;
+        private CancellationTokenSource? _searchCts;
+        private readonly object _searchLock = new object();
+        private Product? _currentEditProduct;
+        private bool _isAddingNew;
 
         public StoragePage(Frame frame)
         {
             InitializeComponent();
             _frame = frame;
-            
-            ProductsItemsControl.ItemsSource = _products;
+            _products = new ObservableCollection<ProductViewModel>();
+            _searchIndex = new List<(Product product, string idText, string nameLower)>();
 
-            LocalizeDictionary.Instance.PropertyChanged += (s, e) =>
-            {
-                if (e.PropertyName == nameof(LocalizeDictionary.Culture))
-                {
-                    RefreshProductList();
-                }
-            };
+            ProductsListView.ItemsSource = _products;
 
-            Loaded += async (s, e) => await LoadProducts();
+            LocalizeDictionary.Instance.PropertyChanged += Localize_PropertyChanged;
+
+            Loaded += async (_, _) => await LoadProducts();
         }
 
         private string GetLocalizedString(string key)
@@ -60,6 +49,14 @@ namespace StoreManager
             try
             {
                 _allProducts = await Product.GetAll();
+                // Build a light-weight search index to avoid repeated ToLower() and ToString() calls
+                var builtIndex = _allProducts.Select(p => (product: p, idText: p.Id.ToString(), nameLower: p.Name.ToLowerInvariant())).ToList();
+                lock (_searchLock)
+                {
+                    _searchIndex = builtIndex;
+                }
+
+                // Show a limited number of items initially for faster UI load
                 DisplayProducts(_allProducts.Take(150).ToList());
             }
             catch (Exception ex)
@@ -95,29 +92,95 @@ namespace StoreManager
             EmptyListPanel.Visibility = _products.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private async void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string searchText = SearchTextBox.Text.Trim().ToLower();
-            
+
+            lock (_searchLock)
+            {
+                _searchCts?.Cancel();
+                _searchCts?.Dispose();
+                _searchCts = new CancellationTokenSource();
+            }
+
+            var token = _searchCts.Token;
+
+            // Short-circuit for empty search: show the top 150 quickly
+            if (string.IsNullOrEmpty(searchText))
+            {
+                // Use Dispatcher to ensure UI update
+                await Dispatcher.InvokeAsync(() => DisplayProducts(_allProducts.Take(150).ToList())).Task.ConfigureAwait(false);
+                return;
+            }
+
+            await Task.Run((Func<Task>)(async () =>
+            {
+                try
+                {
+                    await Task.Delay(200, token).ConfigureAwait(false);
+
+                    // perform search on the precomputed index (snapshot under lock)
+                    List<(Product product, string idText, string nameLower)> localIndex;
+                    lock (_searchLock)
+                    {
+                        localIndex = _searchIndex;
+                    }
+
+                    var matches = localIndex
+                        .Where(t => t.idText.Contains(searchText) || t.nameLower.Contains(searchText))
+                        .Select(t => t.product)
+                        .ToList();
+
+                    var toDisplay = matches.Take(1000).ToList();
+                    if (token.IsCancellationRequested) return;
+
+                    await Dispatcher.InvokeAsync(() => DisplayProducts(toDisplay)).Task.ConfigureAwait(false);
+                }
+                catch (OperationCanceledException) { }
+                catch (Exception ex)
+                {
+                    // benign: log or show error
+                    await Dispatcher.InvokeAsync(() => CustomMessageBox.ShowError(ex.Message, GetLocalizedString("StoragePage_errorTitle"))).Task.ConfigureAwait(false);
+                }
+            }), token).ConfigureAwait(false);
+        }
+
+        private async void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            lock (_searchLock)
+            {
+                _searchCts?.Cancel();
+                _searchCts?.Dispose();
+                _searchCts = new CancellationTokenSource();
+            }
+
+            var token = _searchCts.Token;
+            string searchText = SearchTextBox.Text.Trim().ToLower();
+
             if (string.IsNullOrEmpty(searchText))
             {
                 DisplayProducts(_allProducts.Take(150).ToList());
                 return;
             }
 
-            var filtered = _allProducts
-                .Where(p => 
-                    p.Id.ToString().Contains(searchText) ||
-                    p.Name.ToLower().Contains(searchText))
-                .ToList();
+            await Task.Run((Func<Task>)(async () =>
+            {
+                List<(Product product, string idText, string nameLower)> localIndex;
+                lock (_searchLock)
+                {
+                    localIndex = _searchIndex;
+                }
 
-            DisplayProducts(filtered);
-        }
+                var matches = localIndex
+                    .Where(t => t.idText.Contains(searchText) || t.nameLower.Contains(searchText))
+                    .Select(t => t.product)
+                    .ToList();
 
-        private void SearchButton_Click(object sender, RoutedEventArgs e)
-        {
-            SearchTextBox_TextChanged(sender, new TextChangedEventArgs(e.RoutedEvent, UndoAction.None));
-        }
+                var toDisplay = matches.Take(1000).ToList();
+                if (token.IsCancellationRequested) return;
+                await Dispatcher.InvokeAsync(() => DisplayProducts(toDisplay)).Task.ConfigureAwait(false);
+            }), token).ConfigureAwait(false);
+         }
 
         private void AddNewProduct_Click(object sender, RoutedEventArgs e)
         {
@@ -139,23 +202,21 @@ namespace StoreManager
 
         private void EditProduct_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.Tag is ProductViewModel viewModel)
-            {
-                _isAddingNew = false;
-                _currentEditProduct = viewModel.Product;
+            if (sender is not Button button || button.Tag is not ProductViewModel viewModel) return;
+            _isAddingNew = false;
+            _currentEditProduct = viewModel.Product;
                 
-                EditIdTextBox.Text = _currentEditProduct.Id.ToString();
-                EditNameTextBox.Text = _currentEditProduct.Name;
-                EditUnitTextBox.Text = _currentEditProduct.Unit;
-                EditStockTextBox.Text = _currentEditProduct.Stock.ToString();
-                EditSupplierPriceTextBox.Text = _currentEditProduct.SupplierPrice.ToString();
-                EditSalePriceTextBox.Text = _currentEditProduct.SalePrice.ToString();
-                EditVatTextBox.Text = _currentEditProduct.VatPercentage.ToString();
-                EditFractionableCheckBox.IsChecked = _currentEditProduct.Fractionable;
+            EditIdTextBox.Text = _currentEditProduct.Id.ToString();
+            EditNameTextBox.Text = _currentEditProduct.Name;
+            EditUnitTextBox.Text = _currentEditProduct.Unit;
+            EditStockTextBox.Text = _currentEditProduct.Stock.ToString(CultureInfo.InvariantCulture);
+            EditSupplierPriceTextBox.Text = _currentEditProduct.SupplierPrice.ToString(CultureInfo.InvariantCulture);
+            EditSalePriceTextBox.Text = _currentEditProduct.SalePrice.ToString(CultureInfo.InvariantCulture);
+            EditVatTextBox.Text = _currentEditProduct.VatPercentage.ToString();
+            EditFractionableCheckBox.IsChecked = _currentEditProduct.Fractionable;
                 
-                EditPanel.Visibility = Visibility.Visible;
-                EditNameTextBox.Focus();
-            }
+            EditPanel.Visibility = Visibility.Visible;
+            EditNameTextBox.Focus();
         }
 
         private async void SaveProduct_Click(object sender, RoutedEventArgs e)
@@ -202,15 +263,7 @@ namespace StoreManager
                     return;
                 }
 
-                Product product;
-                if (_isAddingNew)
-                {
-                    product = new Product();
-                }
-                else
-                {
-                    product = _currentEditProduct!;
-                }
+                var product = _isAddingNew ? new Product() : _currentEditProduct!;
 
                 product.Name = EditNameTextBox.Text.Trim();
                 product.Unit = EditUnitTextBox.Text.Trim();
@@ -244,30 +297,27 @@ namespace StoreManager
             _isAddingNew = false;
         }
 
-        private async void DeleteProduct_Click(object sender, RoutedEventArgs e)
+        private void DeleteProduct_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.Tag is ProductViewModel viewModel)
-            {
-                var result = CustomMessageBox.ShowQuestion(
-                    string.Format(GetLocalizedString("StoragePage_deleteConfirmation"), viewModel.Product.Name),
-                    GetLocalizedString("StoragePage_confirmationTitle"),
-                    CustomMessageBox.MessageBoxButtons.YesNo);
+            if (sender is not Button button || button.Tag is not ProductViewModel viewModel) return;
+            var result = CustomMessageBox.ShowQuestion(
+                string.Format(GetLocalizedString("StoragePage_deleteConfirmation"), viewModel.Product.Name),
+                GetLocalizedString("StoragePage_confirmationTitle")
+            );
 
-                if (result == MessageBoxResult.Yes)
-                {
-                    try
-                    {
-                        CustomMessageBox.ShowWarning(
-                            GetLocalizedString("StoragePage_deleteNotImplemented"),
-                            GetLocalizedString("StoragePage_warningTitle"));
-                    }
-                    catch (Exception ex)
-                    {
-                        CustomMessageBox.ShowError(
-                            string.Format(GetLocalizedString("StoragePage_deleteError"), ex.Message),
-                            GetLocalizedString("StoragePage_errorTitle"));
-                    }
-                }
+            if (result != MessageBoxResult.Yes) return;
+            
+            try
+            {
+                CustomMessageBox.ShowWarning(
+                    GetLocalizedString("StoragePage_deleteNotImplemented"),
+                    GetLocalizedString("StoragePage_warningTitle"));
+            }
+            catch (Exception ex)
+            {
+                CustomMessageBox.ShowError(
+                    string.Format(GetLocalizedString("StoragePage_deleteError"), ex.Message),
+                    GetLocalizedString("StoragePage_errorTitle"));
             }
         }
 
@@ -280,22 +330,24 @@ namespace StoreManager
             
             _frame.Navigate(new WelcomeSelector(_frame));
         }
+
+        private void Localize_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(LocalizeDictionary.Culture))
+            {
+                RefreshProductList();
+            }
+        }
     }
 
-    public class ProductViewModel : INotifyPropertyChanged
+    public class ProductViewModel(Product product) : INotifyPropertyChanged
     {
-        public Product Product { get; }
-
-        public ProductViewModel(Product product)
-        {
-            Product = product;
-        }
+        public Product Product { get; } = product;
 
         public int Id => Product.Id;
         public string Name => Product.Name;
         public string Unit => Product.Unit;
         public string StockFormatted => $"{Product.Stock:N2}";
-        
         public string SupplierPriceFormatted => $"{Product.SupplierPrice:N0} {GetCurrencyString()}";
         public string SalePriceFormatted => $"{Product.SalePrice:N0} {GetCurrencyString()}";
 

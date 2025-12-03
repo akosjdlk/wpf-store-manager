@@ -1,5 +1,3 @@
-using System.Windows.Controls.Primitives;
-
 namespace StoreManager.Classes
 {
     public class Product : BaseModel<Product>
@@ -79,17 +77,16 @@ namespace StoreManager.Classes
 
 		public static async Task<List<Product>> GetAll()
         {
-            using var cmd = await Database.GetCommandAsync("SELECT * FROM products");
-			using var reader = await cmd.ExecuteReaderAsync();
-			return await FromReaderAsync(reader);
-		}
+            return await Database.QueryAsync("SELECT * FROM products", FromReaderAsync);
+        }
 
         public async Task<List<Barcode>> GetBarcodes()
         {
-
-            using var cmd = await Database.GetCommandAsync("SELECT * FROM barcodes WHERE product_id = @product_id");
-            cmd.Parameters.AddWithValue("@product_id", Id);
-            return await Barcode.FromReaderAsync(await cmd.ExecuteReaderAsync());
+            return await Database.QueryAsync(
+                "SELECT * FROM barcodes WHERE product_id = @product_id",
+                cmd => cmd.Parameters.AddWithValue("@product_id", Id),
+                Barcode.FromReaderAsync
+            );
         }
     }
 }

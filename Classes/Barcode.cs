@@ -1,6 +1,4 @@
-﻿using System.Windows.Documents;
-
-namespace StoreManager.Classes
+﻿namespace StoreManager.Classes
 {
     public class Barcode : BaseModel<Barcode>
     {
@@ -41,8 +39,7 @@ namespace StoreManager.Classes
 
         public static async Task<List<Barcode>> GetAll()
         {
-            using var cmd = await Database.GetCommandAsync("SELECT * FROM barcodes");
-            return await FromReaderAsync(await cmd.ExecuteReaderAsync());
+            return await Database.QueryAsync("SELECT * FROM barcodes", FromReaderAsync);
         }
     }
 }

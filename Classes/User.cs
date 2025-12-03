@@ -13,13 +13,13 @@ namespace StoreManager.Classes
         [DbField("id"), AutoIncrement]
         public int Id { get; private set; }
 
-        private int _can_access_storage;
+        private int _canAccessStorage;
 
         [DbField("can_access_storage")]
         public bool CanAccessStorage
         {
-            get => Convert.ToBoolean(_can_access_storage);
-            set => Set(ref _can_access_storage, Convert.ToInt16(value));
+            get => Convert.ToBoolean(_canAccessStorage);
+            set => Set(ref _canAccessStorage, Convert.ToInt16(value));
         }
 
         private string _password = string.Empty;
@@ -33,9 +33,9 @@ namespace StoreManager.Classes
 
         public static async Task<User?> GetUser(int id)
         {
-            using var cmd = await Database.GetCommandAsync("SELECT * FROM users WHERE id = @id");
-            cmd.Parameters.AddWithValue("id", id);
-            return await FromFirstRowAsync(await cmd.ExecuteReaderAsync());
+            return await Database.QueryAsync("SELECT * FROM users WHERE id = @id",
+                cmd => cmd.Parameters.AddWithValue("id", id),
+                FromFirstRowAsync);
         }
     } 
 }
