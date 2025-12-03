@@ -27,6 +27,7 @@ namespace StoreManager
         private List<Product> _allProducts = new();
         private Product? _currentEditProduct = null;
         private bool _isAddingNew = false;
+        private System.Threading.CancellationTokenSource? _searchCancellation;
 
         public StoragePage(Frame frame)
         {
@@ -95,7 +96,23 @@ namespace StoreManager
             EmptyListPanel.Visibility = _products.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private async void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            _searchCancellation?.Cancel();
+            _searchCancellation = new System.Threading.CancellationTokenSource();
+            var token = _searchCancellation.Token;
+
+            try
+            {
+                await Task.Delay(300, token);
+                PerformSearch();
+            }
+            catch (TaskCanceledException)
+            {
+            }
+        }
+
+        private void PerformSearch()
         {
             string searchText = SearchTextBox.Text.Trim().ToLower();
             
@@ -109,6 +126,7 @@ namespace StoreManager
                 .Where(p => 
                     p.Id.ToString().Contains(searchText) ||
                     p.Name.ToLower().Contains(searchText))
+                .Take(150)
                 .ToList();
 
             DisplayProducts(filtered);
@@ -116,7 +134,8 @@ namespace StoreManager
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            SearchTextBox_TextChanged(sender, new TextChangedEventArgs(e.RoutedEvent, UndoAction.None));
+            _searchCancellation?.Cancel();
+            PerformSearch();
         }
 
         private void AddNewProduct_Click(object sender, RoutedEventArgs e)
@@ -147,9 +166,9 @@ namespace StoreManager
                 EditIdTextBox.Text = _currentEditProduct.Id.ToString();
                 EditNameTextBox.Text = _currentEditProduct.Name;
                 EditUnitTextBox.Text = _currentEditProduct.Unit;
-                EditStockTextBox.Text = _currentEditProduct.Stock.ToString();
-                EditSupplierPriceTextBox.Text = _currentEditProduct.SupplierPrice.ToString();
-                EditSalePriceTextBox.Text = _currentEditProduct.SalePrice.ToString();
+                EditStockTextBox.Text = _currentEditProduct.Stock.ToString("0.##");
+                EditSupplierPriceTextBox.Text = _currentEditProduct.SupplierPrice.ToString("0.##");
+                EditSalePriceTextBox.Text = _currentEditProduct.SalePrice.ToString("0.##");
                 EditVatTextBox.Text = _currentEditProduct.VatPercentage.ToString();
                 EditFractionableCheckBox.IsChecked = _currentEditProduct.Fractionable;
                 
@@ -202,31 +221,40 @@ namespace StoreManager
                     return;
                 }
 
-                Product product;
                 if (_isAddingNew)
                 {
-                    product = new Product();
+                    var newProduct = new Product();
+                    newProduct.Name = EditNameTextBox.Text.Trim();
+                    newProduct.Unit = EditUnitTextBox.Text.Trim();
+                    newProduct.Stock = stock;
+                    newProduct.SupplierPrice = supplierPrice;
+                    newProduct.SalePrice = salePrice;
+                    newProduct.VatPercentage = vat;
+                    newProduct.Fractionable = EditFractionableCheckBox.IsChecked ?? false;
+
+                    await newProduct.Save();
+                    _allProducts.Add(newProduct);
                 }
-                else
+                else if (_currentEditProduct != null)
                 {
-                    product = _currentEditProduct!;
+                    _currentEditProduct.Name = EditNameTextBox.Text.Trim();
+                    _currentEditProduct.Unit = EditUnitTextBox.Text.Trim();
+                    _currentEditProduct.Stock = stock;
+                    _currentEditProduct.SupplierPrice = supplierPrice;
+                    _currentEditProduct.SalePrice = salePrice;
+                    _currentEditProduct.VatPercentage = vat;
+                    _currentEditProduct.Fractionable = EditFractionableCheckBox.IsChecked ?? false;
+
+                    await _currentEditProduct.Save();
                 }
-
-                product.Name = EditNameTextBox.Text.Trim();
-                product.Unit = EditUnitTextBox.Text.Trim();
-                product.Stock = stock;
-                product.SupplierPrice = supplierPrice;
-                product.SalePrice = salePrice;
-                product.VatPercentage = vat;
-                product.Fractionable = EditFractionableCheckBox.IsChecked ?? false;
-
-                await product.Save();
 
                 CustomMessageBox.ShowSuccess(
                     GetLocalizedString("StoragePage_saveSuccess"),
                     GetLocalizedString("StoragePage_successTitle"));
 
                 EditPanel.Visibility = Visibility.Collapsed;
+                
+                SearchTextBox.Clear();
                 await LoadProducts();
             }
             catch (Exception ex)
