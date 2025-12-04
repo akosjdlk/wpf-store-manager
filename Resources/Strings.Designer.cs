@@ -559,6 +559,15 @@ namespace StoreManager.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Termék sikeresen törölve!.
+        /// </summary>
+        internal static string StoragePage_deleteSuccess {
+            get {
+                return ResourceManager.GetString("StoragePage_deleteSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Törlés.
         /// </summary>
         internal static string StoragePage_deleteTooltip {

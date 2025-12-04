@@ -14,7 +14,6 @@ namespace StoreManager
         private Frame _frame;
         private ObservableCollection<ProductViewModel> _products;
         private List<Product> _allProducts = new();
-        // precomputed lowercase search index for quick search
         private List<(Product product, string idText, string nameLower)> _searchIndex;
         private CancellationTokenSource? _searchCts;
         private readonly object _searchLock = new object();
@@ -49,14 +48,12 @@ namespace StoreManager
             try
             {
                 _allProducts = await Product.GetAll();
-                // Build a light-weight search index to avoid repeated ToLower() and ToString() calls
                 var builtIndex = _allProducts.Select(p => (product: p, idText: p.Id.ToString(), nameLower: p.Name.ToLowerInvariant())).ToList();
                 lock (_searchLock)
                 {
                     _searchIndex = builtIndex;
                 }
 
-                // Show a limited number of items initially for faster UI load
                 DisplayProducts(_allProducts.Take(150).ToList());
             }
             catch (Exception ex)
@@ -105,10 +102,8 @@ namespace StoreManager
 
             var token = _searchCts.Token;
 
-            // Short-circuit for empty search: show the top 150 quickly
             if (string.IsNullOrEmpty(searchText))
             {
-                // Use Dispatcher to ensure UI update
                 await Dispatcher.InvokeAsync(() => DisplayProducts(_allProducts.Take(150).ToList())).Task.ConfigureAwait(false);
                 return;
             }
@@ -119,7 +114,6 @@ namespace StoreManager
                 {
                     await Task.Delay(200, token).ConfigureAwait(false);
 
-                    // perform search on the precomputed index (snapshot under lock)
                     List<(Product product, string idText, string nameLower)> localIndex;
                     lock (_searchLock)
                     {
@@ -139,7 +133,6 @@ namespace StoreManager
                 catch (OperationCanceledException) { }
                 catch (Exception ex)
                 {
-                    // benign: log or show error
                     await Dispatcher.InvokeAsync(() => CustomMessageBox.ShowError(ex.Message, GetLocalizedString("StoragePage_errorTitle"))).Task.ConfigureAwait(false);
                 }
             }), token).ConfigureAwait(false);
@@ -263,7 +256,17 @@ namespace StoreManager
                     return;
                 }
 
-                var product = _isAddingNew ? new Product() : _currentEditProduct!;
+                Product product;
+                bool isNew = _isAddingNew;
+                
+                if (_isAddingNew)
+                {
+                    product = new Product();
+                }
+                else
+                {
+                    product = _currentEditProduct!;
+                }
 
                 product.Name = EditNameTextBox.Text.Trim();
                 product.Unit = EditUnitTextBox.Text.Trim();
@@ -275,12 +278,34 @@ namespace StoreManager
 
                 await product.Save();
 
+                if (isNew)
+                {
+                    _allProducts.Add(product);
+                }
+
+                lock (_searchLock)
+                {
+                    _searchIndex = _allProducts.Select(p => 
+                        (product: p, idText: p.Id.ToString(), nameLower: p.Name.ToLowerInvariant())
+                    ).ToList();
+                }
+
                 CustomMessageBox.ShowSuccess(
                     GetLocalizedString("StoragePage_saveSuccess"),
                     GetLocalizedString("StoragePage_successTitle"));
 
                 EditPanel.Visibility = Visibility.Collapsed;
-                await LoadProducts();
+                
+                var currentSearch = SearchTextBox.Text;
+                if (string.IsNullOrWhiteSpace(currentSearch))
+                {
+                    DisplayProducts(_allProducts.Take(150).ToList());
+                }
+                else
+                {
+                    SearchTextBox.Text = "";
+                    SearchTextBox.Text = currentSearch;
+                }
             }
             catch (Exception ex)
             {
@@ -297,21 +322,37 @@ namespace StoreManager
             _isAddingNew = false;
         }
 
-        private void DeleteProduct_Click(object sender, RoutedEventArgs e)
+        private async void DeleteProduct_Click(object sender, RoutedEventArgs e)
         {
             if (sender is not Button button || button.Tag is not ProductViewModel viewModel) return;
+            
             var result = CustomMessageBox.ShowQuestion(
                 string.Format(GetLocalizedString("StoragePage_deleteConfirmation"), viewModel.Product.Name),
-                GetLocalizedString("StoragePage_confirmationTitle")
+                GetLocalizedString("StoragePage_confirmationTitle"),
+                CustomMessageBox.MessageBoxButtons.YesNo
             );
 
             if (result != MessageBoxResult.Yes) return;
             
             try
             {
-                CustomMessageBox.ShowWarning(
-                    GetLocalizedString("StoragePage_deleteNotImplemented"),
-                    GetLocalizedString("StoragePage_warningTitle"));
+                await viewModel.Product.Delete();
+                
+                _allProducts.Remove(viewModel.Product);
+                _products.Remove(viewModel);
+                
+                lock (_searchLock)
+                {
+                    _searchIndex = _allProducts.Select(p => 
+                        (product: p, idText: p.Id.ToString(), nameLower: p.Name.ToLowerInvariant())
+                    ).ToList();
+                }
+                
+                UpdateEmptyListVisibility();
+                
+                CustomMessageBox.ShowSuccess(
+                    GetLocalizedString("StoragePage_deleteSuccess"),
+                    GetLocalizedString("StoragePage_successTitle"));
             }
             catch (Exception ex)
             {

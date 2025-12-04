@@ -446,4 +446,7 @@ Visszajáró: {2} Ft</value>
 	<data name="StoragePage_deleteError" xml:space="preserve">
     <value>Hiba a törlés során: {0}</value>
   </data>
+  <data name="StoragePage_deleteSuccess" xml:space="preserve">
+     <value>Termék sikeresen törölve!</value>
+  </data>
 </root>

@@ -88,5 +88,12 @@ namespace StoreManager.Classes
                 Barcode.FromReaderAsync
             );
         }
+
+        public async Task Delete()
+        {
+            using var cmd = await Database.GetCommandAsync("DELETE FROM products WHERE id = @id");
+            cmd.Parameters.AddWithValue("@id", Id);
+            await cmd.ExecuteNonQueryAsync();
+        }
     }
 }

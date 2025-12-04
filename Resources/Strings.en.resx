@@ -459,4 +459,7 @@ Change: {2} Ft</value>
 	<data name="StoragePage_deleteError" xml:space="preserve">
     <value>Error deleting product: {0}</value>
   </data>
+	<data name="StoragePage_deleteSuccess" xml:space="preserve">
+  <value>Product deleted successfully!</value>
+</data>
 </root>
