@@ -118,7 +118,12 @@ namespace StoreManager.Classes
 		public async Task Save()
 		{
 			var autoField = BaseModel<TSelf>.GetAutoIncrementField();
-			var fields = GetDbFields().Where(p => p != autoField);
+			var autoFieldValue = autoField?.GetValue(this);
+			var isNew = autoField == null || autoFieldValue == null || Convert.ToInt64(autoFieldValue) == 0;
+			
+			var fields = isNew 
+				? GetDbFields().Where(p => p != autoField)
+				: GetDbFields();
 
 			var columns = string.Join(", ",
 				fields.Select(p => p.GetCustomAttribute<DbFieldAttribute>()!.ColumnName)
@@ -129,16 +134,15 @@ namespace StoreManager.Classes
 			);
 
 			var update = string.Join(", ",
-				_edited.Select(k =>
+				fields.Where(p => p != autoField).Select(p =>
 				{
-					var prop = GetDbFields().First(p => p.Name.Equals(k, StringComparison.OrdinalIgnoreCase));
-					var col = prop.GetCustomAttribute<DbFieldAttribute>()!.ColumnName;
+					var col = p.GetCustomAttribute<DbFieldAttribute>()!.ColumnName;
 					return $"{col} = @{col}";
 				})
 			);
 
 			var sql = $"INSERT INTO {TableName} ({columns}) VALUES ({parameters})";
-			if (update.Length > 0)
+			if (!isNew && update.Length > 0)
 				sql += $" ON DUPLICATE KEY UPDATE {update}";
 
 			await Database.WithCommandAsync(sql, async cmd =>
